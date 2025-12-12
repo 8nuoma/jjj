@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MikuFans - 电脑版</title>
+    <style>
+        /* 全局样式：精简冗余，移除宽高限制，保留自适应 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", Arial, sans-serif;
+        }
+        body {
+            background-color: #F5F5F5;
+            font-size: 12px;
+            margin: 0 auto; /* 仅保留居中，删除 max-width/min-width */
+        }
+        /* 顶部栏 */
+        .top-bar {
+            background-color: #FFFFCC;
+            border-bottom: 2px solid #FF5533; /* 改为橙红色 */
+            padding: 5px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: #FF5533; /* 改为橙红色 */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+        }
+        .logo-text span {
+            color: #FF5533; /* 改为橙红色 */
+        }
+        /* PC登录区（仅保留电脑版） */
+        .pc-login-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pc-login-area input {
+            width: 120px;
+            padding: 6px 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        .pc-login-area input:focus {
+            border-color: #c0c0c0;
+            outline: none;
+        }
+        .login-btn {
+            padding: 6px 12px;
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .login-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .login-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .login-link {
+            color: #0000EE;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        /* PC导航栏 */
+        .pc-nav-bar {
+            background-color: #F0F0F0;
+            border-bottom: 1px solid #ccc;
+            padding: 8px 20px;
+        }
+        .pc-nav-item {
+            color: #000;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 14px;
+        }
+        .pc-nav-item.active {
+            color: #FF5533; /* 改为橙红色 */
+            font-weight: bold;
+        }
+        .upload-link {
+            float: right;
+            color: #FF0000;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 14px;
+            display: none;
+        }
+        /* 搜索区：删除搜索框最大宽度限制 */
+        .search-section {
+            padding: 8px 20px;
+            background-color: #E0E0E0;
+            border-bottom: 1px solid #ccc;
+        }
+        .search-input {
+            width: calc(100% - 80px);
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .search-input:focus {
+            border-color: #c0c0c0;
+            outline: none;
+        }
+        .search-btn {
+            padding: 8px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: transparent;
+            color: #505050;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .search-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .search-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        /* 内容区：删除最大宽度限制，保留弹性布局 */
+        .content {
+            padding: 20px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+        /* 视频列表容器 */
+        .video-container {
+            flex: 4; /* 固定比例，不被拉伸 */
+        }
+        /* 视频列表 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* 优化卡片宽度，适配宽屏 */
+            gap: 15px;
+        }
+        .video-item {
+            text-align: center;
+            cursor: pointer;
+            background-color: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .video-item:hover {
+            transform: translateY(-3px);
+        }
+        .video-cover {
+            width: 100%;
+            height: 100px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+        }
+        .video-title {
+            margin-top: 8px;
+            color: #0000EE;
+            text-decoration: underline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 8px 8px;
+            font-size: 13px;
+        }
+        /* 侧边栏（仅PC端显示）：删除宽高限制，保留弹性比例 */
+        .side-bar {
+            display: block;
+            flex: 1; /* 仅保留弹性比例，删除 min-width/max-width */
+        }
+        .side-card {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .card-title {
+            background-color: #FF5533; /* 改为橙红色 */
+            color: #fff;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .card-list {
+            padding: 10px;
+            list-style: none;
+        }
+        .card-list li {
+            padding: 4px 0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .card-list li:hover {
+            color: #FF5533; /* 改为橙红色 */
+        }
+        /* 个人中心页面：删除最大宽度限制 */
+        #profilePage {
+            display: none;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        .profile-header {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .profile-avatar-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #FF5533; /* 改为橙红色 */
+            background: #FF5533; /* 改为橙红色 */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background-size: cover;
+            background-position: center;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        /* 优化：小巧的编辑按钮（安卓风格） */
+        .edit-btn {
+            margin-left: 8px;
+            width: 24px;
+            height: 24px;
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        .edit-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .edit-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 15px;
+        }
+        .profile-stat-item {
+            text-align: center;
+        }
+        .profile-stat-value {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .profile-stat-name {
+            font-size: 12px;
+            color: #666;
+        }
+        .profile-tabs {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .profile-tab {
+            padding: 8px 16px;
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .profile-tab:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .profile-tab:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .profile-tab.active {
+            background-color: #f0f0f0;
+            color: #505050;
+            border-color: #d0d0d0;
+        }
+        .profile-content {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        .profile-content-item {
+            display: none;
+        }
+        .profile-content-item.active {
+            display: block;
+        }
+        /* 视频播放页：保留16:9宽高比，删除最大宽度限制 */
+        #videoPlayerPage {
+            display: none;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        /* 视频播放页面布局 - B站同款布局 */
+        .video-player-content {
+            display: flex;
+            gap: 20px;
+            max-width: 1920px; /* B站最大宽度 */
+            margin: 0 auto;
+        }
+        .main-player-section {
+            flex: 1;
+            min-width: 0;
+            max-width: 1280px; /* B站播放器最大宽度 */
+        }
+        .related-videos {
+            width: 360px; /* B站侧边栏固定宽度 */
+            flex-shrink: 0;
+        }
+        /* 返回按钮样式 - 安卓风格 */
+        .back-btn {
+            margin-bottom: 15px;
+            padding: 8px 16px;
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .back-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .back-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        /* 播放器容器：B站同款尺寸，保持16:9宽高比 */
+        .player-container {
+            position: relative;
+            width: 100%;
+            max-width: 1280px; /* B站最大宽度 */
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 宽高比（56.25% = 9/16） */
+            background-color: #000;
+            border-radius: 8px; /* B站圆角样式 */
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* B站阴影效果 */
+        }
+        /* 播放器内部元素绝对定位，适应宽高比容器 */
+        .player-controls, .danmu-btn, .danmu-panel {
+            position: absolute;
+            z-index: 10;
+        }
+        /* 播放器控制栏 - B站风格 */
+        .player-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .player-container:hover .player-controls {
+            opacity: 1;
+        }
+        .android-btn {
+            background-color: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(2px);
+            transition: all 0.2s ease;
+        }
+        .android-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+        .android-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .play-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+        
+        .play-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+        .play-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+        /* 可拖动进度条 */
+        .progress-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            transition: height 0.2s ease;
+        }
+        
+        .progress-bar:hover {
+            height: 8px;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            background-color: #fb7299; /* B站粉色 */
+            border-radius: 3px;
+            transition: width 0.1s ease;
+        }
+        .progress-thumb {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px;
+            height: 14px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .time-text {
+            color: #fff;
+            font-size: 14px;
+            min-width: 80px;
+            text-align: right;
+        }
+        /* 弹幕功能 - B站风格圆形按钮 */
+        .danmu-btn {
+            position: absolute;
+            right: 20px;
+            bottom: 80px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: rgba(251, 114, 153, 0.9);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(251, 114, 153, 0.3);
+            backdrop-filter: blur(4px);
+        }
+        .danmu-btn:hover {
+            background-color: rgba(251, 114, 153, 1);
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(251, 114, 153, 0.4);
+        }
+        .danmu-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(251, 114, 153, 0.3);
+        }
+        .danmu-panel {
+            display: none;
+            position: absolute;
+            right: 20px;
+            bottom: 140px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 12px;
+            border-radius: 8px;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            backdrop-filter: blur(8px);
+        }
+        .danmu-input {
+            width: 180px;
+            padding: 6px 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        .danmu-input:focus {
+            border-color: #c0c0c0;
+            outline: none;
+        }
+        .danmu-color {
+            width: 70px;
+            padding: 6px 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        .danmu-color:focus {
+            border-color: #c0c0c0;
+            outline: none;
+        }
+        .danmu-size {
+            width: 60px;
+            padding: 6px 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        .danmu-size:focus {
+            border-color: #c0c0c0;
+            outline: none;
+        }
+        .danmu-send-btn {
+            padding: 6px 12px;
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .danmu-send-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .danmu-send-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .video-meta {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .player-video-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .up-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .up-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #FF5533; /* 改为橙红色 */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .up-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .subscribe-btn {
+            margin-left: auto;
+            padding: 8px 16px;
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .subscribe-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .subscribe-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .subscribe-btn.active {
+            background-color: #f0f0f0;
+            color: #505050;
+            border-color: #d0d0d0;
+        }
+        /* 视频操作按钮（点赞、收藏、分享） */
+        .video-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #505050;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .action-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .action-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .action-icon {
+            width: 20px;
+            height: 20px;
+            color: #999;
+            transition: color 0.2s ease;
+        }
+        .action-text {
+            font-weight: 500;
+        }
+        .action-count {
+            font-size: 13px;
+            color: #999;
+        }
+        /* 点赞按钮激活状态 - 红色 */
+        .like-btn.active {
+            background-color: #fff;
+            border-color: #ff6666;
+            color: #ff6666;
+        }
+        .like-btn.active .action-icon {
+            color: #ff6666;
+        }
+        .like-btn.active .action-text {
+            color: #ff6666;
+        }
+        .like-btn.active .action-count {
+            color: #ff6666;
+        }
+        /* 收藏按钮激活状态 - 黄色 */
+        .favorite-btn.active {
+            background-color: #fff;
+            border-color: #ffb800;
+            color: #ffb800;
+        }
+        .favorite-btn.active .action-icon {
+            color: #ffb800;
+        }
+        .favorite-btn.active .action-text {
+            color: #ffb800;
+        }
+        .favorite-btn.active .action-count {
+            color: #ffb800;
+        }
+        /* 分享按钮样式 */
+        .share-btn:hover {
+            background-color: #f0f8ff;
+            border-color: #4a90e2;
+            color: #4a90e2;
+        }
+        /* 推荐视频区（右侧布局） */
+        .related-videos {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 4px;
+            height: fit-content;
+        }
+        .related-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        /* 推荐视频列表样式 */
+        .related-video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .related-video-item {
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .related-video-item:hover {
+            background-color: #f5f5f5;
+        }
+        .related-video-cover {
+            width: 120px;
+            height: 68px;
+            background: #000;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .related-video-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .related-video-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #000;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+        .related-video-up {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .related-video-stats {
+            font-size: 12px;
+            color: #999;
+        }
+        /* 登录/注册/修改资料弹窗：修复验证码压缩 */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 2px solid #FF5533; /* 改为橙红色 */
+            padding: 20px;
+            z-index: 999;
+            border-radius: 6px;
+            width: 350px;
+        }
+        .modal-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: inline-block;
+            width: 70px;
+            text-align: right;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        .form-group input {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .form-group input:focus {
+            border-color: #c0c0c0;
+        }
+        .captcha-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* 修复验证码画布压缩：固定宽高，禁止缩放 */
+        #captchaCanvas, #regCaptchaCanvas, #mobileLoginCaptchaCanvas {
+            width: 100px;
+            height: 36px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            border-radius: 4px;
+            object-fit: none; /* 禁止拉伸 */
+            transition: all 0.2s ease;
+        }
+        #captchaCanvas:hover, #regCaptchaCanvas:hover, #mobileLoginCaptchaCanvas:hover {
+            border-color: #c0c0c0;
+        }
+        /* 安卓风格select下拉框 */
+        .android-select {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: transparent;
+            font-size: 14px;
+            color: #505050;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .android-select:focus {
+            border-color: #c0c0c0;
+            outline: none;
+        }
+        .android-select:hover {
+            border-color: #c0c0c0;
+        }
+        /* 安卓风格输入框 */
+        .android-input {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: transparent;
+            font-size: 14px;
+            color: #505050;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            width: 100%;
+        }
+        .android-input:focus {
+            border-color: #c0c0c0;
+            outline: none;
+        }
+        .android-input:hover {
+            border-color: #c0c0c0;
+        }
+        /* 头像上传 */
+        .file-input-wrap {
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+        .file-input-btn {
+            padding: 6px 12px;
+            background-color: transparent;
+            color: #505050;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 2;
+            position: relative;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .file-input-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .file-input-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 3;
+        }
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid #FF5533; /* 改为橙红色 */
+            margin: 10px 0 0 85px;
+            display: none;
+            object-fit: cover;
+        }
+        .avatar-tip {
+            font-size: 12px;
+            color: #666;
+            margin: 5px 0 0 85px;
+            display: none;
+        }
+        .form-switch {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #0000EE;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .modal-btns {
+            text-align: center;
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+            background-color: transparent;
+            color: #505050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .modal-btn:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        .modal-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .modal-btn.confirm {
+            background-color: transparent;
+            color: #505050;
+            border-color: #e0e0e0;
+        }
+        .modal-btn.confirm:hover {
+            background-color: #f8f8f8;
+            border-color: #c0c0c0;
+        }
+        /* 上传弹窗 */
+        .upload-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 2px solid #FF5533; /* 改为橙红色 */
+            padding: 20px;
+            z-index: 999;
+            border-radius: 6px;
+            width: 400px;
+        }
+        /* 音mad页面样式：删除最大宽度限制 */
+        #yinmadPage {
+            display: none;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        .yinmad-header {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .yinmad-header h2 {
+            color: #FF5533; /* 改为橙红色 */
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .yinmad-desc {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部栏 -->
+    <div class="top-bar">
+        <div class="logo">
+            <div class="logo-img">M</div>
+            <div class="logo-text"><span>M</span>iku<span>Fans</span></div>
+        </div>
+        <div class="pc-login-area" id="pcLoginArea">
+            用户: <input type="text" id="pcLoginUser" placeholder="输入用户名">
+            密码: <input type="password" id="pcLoginPwd" placeholder="输入密码">
+            验证码: <input type="text" id="pcLoginCaptcha" size="4" placeholder="验证码">
+            <canvas id="captchaCanvas" onclick="refreshCaptcha()"></canvas>
+            <button class="login-btn" onclick="doLogin()">登录</button>
+            <span class="login-link" onclick="openLoginModal('register')">注册</span>
+        </div>
+    </div>
+    <!-- PC导航栏（已添加音mad选项） -->
+    <div class="pc-nav-bar">
+        <a href="#" class="pc-nav-item active" onclick="openHomePage()">首页</a>
+        <a href="#" class="pc-nav-item">番剧</a>
+        <a href="#" class="pc-nav-item">音乐</a>
+        <a href="#" class="pc-nav-item">游戏</a>
+        <a href="#" class="pc-nav-item" onclick="openYinmadPage()">音mad</a> <!-- 新增音mad导航项 -->
+        <a href="#" class="upload-link" id="pcUploadLink" onclick="openUploadModal()">投稿上传</a>
+        <a href="#" class="pc-nav-item" id="adminLink" onclick="openAdminPage()" style="display: none;">管理</a>
+        <a href="#" class="pc-nav-item" onclick="openProfilePage()">我的</a>
+    </div>
+    <!-- 搜索区 -->
+    <div class="search-section">
+        <input type="text" class="search-input" placeholder="搜索视频、UP主...">
+        <button class="search-btn">搜索</button>
+    </div>
+    <!-- 首页内容 -->
+    <div class="content" id="homePage">
+        <div class="video-container">
+            <div class="video-grid">
+                <!-- 视频列表将通过API动态加载 -->
+            </div>
+        </div>
+        <div class="side-bar">
+            <div class="side-card">
+                <div class="card-title">名人堂</div>
+                <ul class="card-list" id="fameList">
+                    <!-- 名人堂数据将通过API动态加载 -->
+                </ul>
+            </div>
+            <div class="side-card">
+                <div class="card-title">热门分类</div>
+                <ul class="card-list" id="categoryList">
+                    <!-- 分类数据将通过API动态加载 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 音mad页面（新增完整页面） -->
+    <div id="yinmadPage">
+        <div class="yinmad-header">
+            <h2>音mad分区</h2>
+            <div class="yinmad-desc">
+                汇集Vocaloid相关音mad作品，包含经典曲目remix、鬼畜改编、节奏向混剪等内容，
+                感受音乐与创意的碰撞！
+            </div>
+        </div>
+        <div class="content">
+            <div class="video-container">
+                <div class="video-grid">
+                    <!-- 音mad视频列表将通过API动态加载 -->
+                </div>
+            </div>
+            <div class="side-bar">
+                <div class="side-card">
+                    <div class="card-title">音mad热门标签</div>
+                    <ul class="card-list" id="yinmadTagsList">
+                        <!-- 音mad标签将通过API动态加载 -->
+                    </ul>
+                </div>
+                <div class="side-card">
+                    <div class="card-title">音mad大神推荐</div>
+                    <ul class="card-list" id="yinmadCreatorsList">
+                        <!-- 音mad创作者将通过API动态加载 -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 管理员页面 -->
+    <div id="adminPage" style="display: none;">
+        <div class="yinmad-header">
+            <h2>管理员信息系统</h2>
+            <div class="yinmad-desc">
+                管理用户上传的视频内容，24小时后自动删除
+            </div>
+        </div>
+        <div class="search-section">
+            <input type="text" class="search-input" id="adminSearchInput" placeholder="搜索用户UID或视频标题...">
+            <button class="search-btn" onclick="adminSearch()">搜索</button>
+        </div>
+        <div class="content">
+            <div class="video-container">
+                <div class="video-grid" id="adminReports">
+                    <!-- 管理员报告将通过API动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 个人中心页面 -->
+    <div id="profilePage" style="display: none;">
+        <div class="profile-header">
+            <div class="profile-avatar-container">
+                <div class="profile-avatar">U</div>
+                <div class="profile-info">
+                    <!-- 优化：小巧的编辑按钮（图标样式） -->
+                    <div class="profile-name" id="profileUserName">我的昵称
+                        <button class="edit-btn" onclick="openEditProfileModal()" title="编辑资料">✏️</button>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value">12</div>
+                            <div class="profile-stat-name">粉丝</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value">5</div>
+                            <div class="profile-stat-name">关注</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value">3</div>
+                            <div class="profile-stat-name">作品</div>
+                        </div>
+                    </div>
+                    <div class="profile-tabs">
+                        <div class="profile-tab active" onclick="showProfileTab('history')">观看历史</div>
+                        <div class="profile-tab" onclick="showProfileTab('favorites')">我的收藏</div>
+                        <div class="profile-tab" onclick="showProfileTab('follows')">我的关注</div>
+                        <div class="profile-tab" onclick="showProfileTab('works')">我的作品</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-content">
+            <div class="profile-content-item active" id="profileHistory">
+                <div class="video-grid">
+                    <!-- 观看历史将通过API动态加载 -->
+                </div>
+            </div>
+            <div class="profile-content-item" id="profileFavorites">
+                <div class="video-grid">
+                    <!-- 收藏列表将通过API动态加载 -->
+                </div>
+            </div>
+            <div class="profile-content-item" id="profileFollows">
+                <div class="video-grid">
+                    <!-- 关注列表将通过API动态加载 -->
+                </div>
+            </div>
+            <div class="profile-content-item" id="profileWorks">
+                <div class="video-grid">
+                    <!-- 作品列表将通过API动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 视频播放页：新增返回按钮+推荐视频区 -->
+    <div id="videoPlayerPage" style="display: none;">
+        <button class="back-btn" onclick="goBack()">← 返回</button>
+        <div class="video-player-content">
+            <div class="main-player-section">
+                <div class="player-container" id="playerContainer">
+            <div class="player-controls">
+                <button class="android-btn play-btn" onclick="togglePlay()">▶</button>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                        <div class="progress-thumb" id="progressThumb"></div>
+                    </div>
+                    <div class="time-text" id="timeDisplay">01:30 / 05:00</div>
+                </div>
+                <button class="android-btn volume-btn">🔊</button>
+                <button class="android-btn download-btn" onclick="downloadVideo()">📥</button>
+            </div>
+            <button class="danmu-btn" onclick="toggleDanmuPanel()">弹</button>
+            <div class="danmu-panel" id="danmuPanel" style="display: none;">
+                <input type="text" class="danmu-input" placeholder="输入弹幕内容" id="danmuText">
+                <select class="danmu-color android-select" id="danmuColor">
+                    <option value="#ff0000">红</option>
+                    <option value="#00ff00">绿</option>
+                    <option value="#0000ff">蓝</option>
+                    <option value="#ffff00">黄</option>
+                    <option value="#ffffff" selected>白</option>
+                    <option value="#000000">黑</option>
+                    <option value="#FF5533">橙红</option> <!-- 新增橙红色选项 -->
+                </select>
+                <select class="danmu-size android-select" id="danmuSize">
+                    <option value="14">小</option>
+                    <option value="18" selected>中</option>
+                    <option value="24">大</option>
+                </select>
+                <button class="danmu-send-btn" onclick="sendDanmu()">发送</button>
+            </div>
+        </div>
+        <div class="video-meta">
+            <div class="player-video-title" id="playerVideoTitle">视频标题</div>
+            <div class="up-info">
+                <div class="up-avatar">U</div>
+                <div class="up-name" id="playerUpName">UP主</div>
+                <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubscribe()">订阅</button>
+            </div>
+            <!-- 点赞、收藏、分享按钮 -->
+            <div class="video-actions">
+                <button class="action-btn like-btn" id="likeBtn" onclick="toggleLike()">
+                    <svg class="action-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.85-1.26l3.03-7.08c.09-.23.12-.47.12-.66v-2z"/>
+                    </svg>
+                    <span class="action-text">点赞</span>
+                    <span class="action-count" id="likeCount">1.2万</span>
+                </button>
+                <button class="action-btn favorite-btn" id="favoriteBtn" onclick="toggleFavorite()">
+                    <svg class="action-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                    <span class="action-text">收藏</span>
+                    <span class="action-count" id="favoriteCount">3567</span>
+                </button>
+                <button class="action-btn share-btn" id="shareBtn" onclick="shareVideo()">
+                    <svg class="action-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                    </svg>
+                    <span class="action-text">分享</span>
+                </button>
+            </div>
+        </div>
+    </div>
+        <!-- 推荐视频区（移到右侧） -->
+        <div class="related-videos">
+            <div class="related-title">相关推荐</div>
+            <div class="related-video-list">
+                <!-- 相关推荐将通过API动态加载 -->
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- 登录/注册弹窗 -->
+    <div class="login-modal" id="loginModal">
+        <div id="loginForm">
+            <div class="modal-title">用户登录</div>
+            <div class="form-group">
+                <label>用户名:</label>
+                <input type="text" id="mobileLoginUser" placeholder="输入用户名">
+            </div>
+            <div class="form-group">
+                <label>密码:</label>
+                <input type="password" id="mobileLoginPwd" placeholder="输入密码">
+            </div>
+            <div class="form-group">
+                <label>验证码:</label>
+                <div class="captcha-group">
+                    <canvas id="mobileLoginCaptchaCanvas" onclick="refreshCaptcha()"></canvas>
+                    <input type="text" id="mobileLoginCaptcha" size="4" placeholder="验证码">
+                </div>
+            </div>
+            <div class="modal-btns">
+                <button class="modal-btn" onclick="closeLoginModal()">取消</button>
+                <button class="modal-btn confirm" onclick="doMobileLogin()">登录</button>
+            </div>
+            <div class="form-switch" onclick="switchForm('register')">没有账号？去注册</div>
+        </div>
+        <div id="registerForm" style="display: none;">
+            <div class="modal-title">用户注册</div>
+            <div class="form-group">
+                <label>用户名:</label>
+                <input type="text" id="regUser" placeholder="设置用户名">
+            </div>
+            <div class="form-group">
+                <label>密码:</label>
+                <input type="password" id="regPwd" placeholder="设置密码">
+            </div>
+            <div class="form-group">
+                <label>头像:</label>
+                <div class="file-input-wrap">
+                    <span class="file-input-btn">选择图片</span>
+                    <input type="file" class="file-input" accept="image/*" id="regAvatarInput" onchange="previewAvatar()">
+                </div>
+                <img src="" alt="头像预览" class="avatar-preview" id="regAvatarPreview">
+                <div class="avatar-tip" id="regAvatarTip">预览成功，注册后生效</div>
+            </div>
+            <div class="form-group">
+                <label>验证码:</label>
+                <div class="captcha-group">
+                    <canvas id="regCaptchaCanvas" onclick="refreshRegCaptcha()"></canvas>
+                    <input type="text" id="regCaptcha" size="4" placeholder="验证码">
+                </div>
+            </div>
+            <div class="modal-btns">
+                <button class="modal-btn" onclick="closeLoginModal()">取消</button>
+                <button class="modal-btn confirm" onclick="doRegister()">注册</button>
+            </div>
+            <div class="form-switch" onclick="switchForm('login')">已有账号？去登录</div>
+        </div>
+    </div>
+    <!-- 修改个人资料弹窗 -->
+    <div class="login-modal" id="editProfileModal" style="display: none;">
+        <div class="modal-title">修改个人资料</div>
+        <div class="form-group">
+            <label>新昵称:</label>
+            <input type="text" id="newNickname" placeholder="输入新昵称" value="" class="android-input">
+        </div>
+        <div class="form-group">
+            <label>更换头像:</label>
+            <div class="file-input-wrap">
+                <span class="file-input-btn">选择图片</span>
+                <input type="file" class="file-input" accept="image/*" id="editAvatarInput" onchange="previewEditAvatar()">
+            </div>
+            <img src="" alt="头像预览" class="avatar-preview" id="editAvatarPreview">
+        </div>
+        <div class="modal-btns">
+            <button class="modal-btn" onclick="closeEditProfileModal()">取消</button>
+            <button class="modal-btn confirm" onclick="saveProfileChanges()">保存</button>
+        </div>
+    </div>
+    <!-- 上传弹窗 -->
+    <div class="upload-modal" id="uploadModal">
+        <div class="modal-title">爬取Acfun视频</div>
+        <div class="form-group">
+            <label>Acfun视频ID:</label>
+            <input type="text" id="uploadTitle" placeholder="输入Acfun视频ID (如: 48026629)" class="android-input">
+        </div>
+        <div class="form-group">
+            <label>分区:</label>
+            <select id="uploadCategory" class="android-select">
+            <option>番剧</option>
+            <option>音乐</option>
+            <option>游戏</option>
+            <option>演唱会</option>
+            <option>音mad</option>
+        </select>
+        </div>
+        <div class="modal-btns">
+            <button class="modal-btn" onclick="closeUploadModal()">取消</button>
+            <button class="modal-btn confirm" onclick="doUpload()">爬取</button>
+        </div>
+    </div>
+    <script>
+        // 核心功能JS
+        const captchaCanvas = document.getElementById('captchaCanvas');
+        const regCaptchaCanvas = document.getElementById('regCaptchaCanvas');
+        const mobileLoginCaptchaCanvas = document.getElementById('mobileLoginCaptchaCanvas');
+        const captchaCtx = captchaCanvas?.getContext('2d');
+        const regCaptchaCtx = regCaptchaCanvas?.getContext('2d');
+        const mobileLoginCaptchaCtx = mobileLoginCaptchaCanvas?.getContext('2d');
+        let currentCaptcha = '';
+        let currentRegCaptcha = '';
+        let isLogin = false;
+        let isPlaying = false;
+        let videoDuration = 300;
+        let currentTime = 90;
+        let isDragging = false;
+        let prevPage = 'homePage';
+        // 初始化验证码画布（修复压缩：明确宽高）
+        if (mobileLoginCaptchaCtx) {
+            mobileLoginCaptchaCanvas.width = 100;
+            mobileLoginCaptchaCanvas.height = 36;
+        }
+        if (captchaCtx) {
+            captchaCanvas.width = 100;
+            captchaCanvas.height = 36;
+        }
+        if (regCaptchaCtx) {
+            regCaptchaCanvas.width = 100;
+            regCaptchaCanvas.height = 36;
+        }
+        // 验证码生成
+        function generateCaptcha(ctx, isReg = false) {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, 100, 36);
+            ctx.fillStyle = '#f8f8f8';
+            ctx.fillRect(0, 0, 100, 36);
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let captcha = '';
+            for (let i = 0; i < 4; i++) captcha += chars[Math.floor(Math.random() * chars.length)];
+            
+            // 干扰线
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(Math.random()*100, Math.random()*36);
+                ctx.lineTo(Math.random()*100, Math.random()*36);
+                ctx.strokeStyle = `rgb(${Math.random()*200},${Math.random()*200},${Math.random()*200})`;
+                ctx.stroke();
+            }
+            // 文字
+            ctx.font = '18px Arial';
+            ctx.textAlign = 'center';
+            for (let i = 0; i < 4; i++) {
+                ctx.fillStyle = `rgb(${Math.random()*100},${Math.random()*100},${Math.random()*100})`;
+                ctx.fillText(captcha[i], 20 + i*20, 22);
+            }
+            isReg ? currentRegCaptcha = captcha : currentCaptcha = captcha;
+        }
+        // 初始化验证码
+        if (captchaCtx) generateCaptcha(captchaCtx);
+        if (regCaptchaCtx) generateCaptcha(regCaptchaCtx, true);
+        if (mobileLoginCaptchaCtx) generateCaptcha(mobileLoginCaptchaCtx);
+        function refreshCaptcha() { 
+            generateCaptcha(captchaCtx); 
+            if (mobileLoginCaptchaCtx) generateCaptcha(mobileLoginCaptchaCtx);
+        }
+        function refreshRegCaptcha() { generateCaptcha(regCaptchaCtx, true); }
+        // 头像预览（注册）
+        function previewAvatar() {
+            const file = document.getElementById('regAvatarInput').files[0];
+            if (!file) return;
+            const preview = document.getElementById('regAvatarPreview');
+            const tip = document.getElementById('regAvatarTip');
+            
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/heic'];
+            if (!allowedTypes.includes(file.type) && !file.name.endsWith('.heic')) {
+                tip.textContent = '仅支持JPG/PNG/GIF/HEIC格式';
+                tip.style.color = 'red';
+                tip.style.display = 'block';
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                tip.textContent = '图片大小不能超过10MB';
+                tip.style.color = 'red';
+                tip.style.display = 'block';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                tip.style.color = '#666';
+                tip.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        // 封面预览（上传视频）
+        function previewCover() {
+            const file = document.getElementById('uploadCoverInput').files[0];
+            if (!file) return;
+            const preview = document.getElementById('uploadCoverPreview');
+            
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        // 登录/注册弹窗切换
+        function openLoginModal(formType = 'login') {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const modal = document.getElementById('loginModal');
+            modal.style.display = 'block';
+            if (formType === 'login') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+        function switchForm(formType) {
+            openLoginModal(formType);
+        }
+        function closeLoginModal() { 
+            document.getElementById('loginModal').style.display = 'none';
+            // 重置表单
+            document.getElementById('regUser').value = '';
+            document.getElementById('regPwd').value = '';
+            document.getElementById('regCaptcha').value = '';
+            document.getElementById('regAvatarInput').value = '';
+            document.getElementById('regAvatarPreview').style.display = 'none';
+            document.getElementById('regAvatarTip').style.display = 'none';
+            document.getElementById('mobileLoginUser').value = '';
+            document.getElementById('mobileLoginPwd').value = '';
+            document.getElementById('mobileLoginCaptcha').value = '';
+        }
+        // 登录功能
+        function doMobileLogin() {
+            const user = document.getElementById('mobileLoginUser').value;
+            const pwd = document.getElementById('mobileLoginPwd').value;
+            const captcha = document.getElementById('mobileLoginCaptcha').value.toUpperCase();
+            if (captcha === currentCaptcha && user && pwd) {
+                isLogin = true;
+                localStorage.setItem('isLogin', 'true');
+                localStorage.setItem('username', user);
+                document.getElementById('pcLoginArea').style.display = 'none';
+                document.getElementById('pcUploadLink').style.display = 'inline';
+                document.getElementById('profileUserName').innerText = user;
+                // 保留编辑按钮
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.onclick = openEditProfileModal;
+                editBtn.title = '编辑资料';
+                editBtn.innerText = '✏️';
+                document.getElementById('profileUserName').appendChild(editBtn);
+                alert('登录成功');
+                closeLoginModal();
+            } else {
+                alert('验证码错误或信息不全');
+                refreshCaptcha();
+            }
+        }
+        function doLogin() {
+            const user = document.getElementById('pcLoginUser').value;
+            const pwd = document.getElementById('pcLoginPwd').value;
+            const captcha = document.getElementById('pcLoginCaptcha').value.toUpperCase();
+            if (captcha === currentCaptcha && user && pwd) {
+                isLogin = true;
+                localStorage.setItem('isLogin', 'true');
+                localStorage.setItem('username', user);
+                document.getElementById('pcLoginArea').style.display = 'none';
+                document.getElementById('pcUploadLink').style.display = 'inline';
+                document.getElementById('profileUserName').innerText = user;
+                // 保留编辑按钮
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.onclick = openEditProfileModal;
+                editBtn.title = '编辑资料';
+                editBtn.innerText = '✏️';
+                document.getElementById('profileUserName').appendChild(editBtn);
+                alert('登录成功');
+            } else {
+                alert('验证码错误或信息不全');
+                refreshCaptcha();
+            }
+        }
+        // 注册功能
+        function doRegister() {
+            const user = document.getElementById('regUser').value;
+            const pwd = document.getElementById('regPwd').value;
+            const captcha = document.getElementById('regCaptcha').value.toUpperCase();
+            if (captcha === currentRegCaptcha && user && pwd) {
+                localStorage.setItem('username', user);
+                localStorage.setItem('password', pwd);
+                alert('注册成功，请登录');
+                closeLoginModal();
+                openLoginModal('login');
+            } else {
+                alert('验证码错误或信息不全');
+                refreshRegCaptcha();
+            }
+        }
+        // 页面切换
+        function openHomePage() {
+            // 重置所有导航项激活状态
+            document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('.pc-nav-item[onclick="openHomePage()"]').classList.add('active');
+            
+            document.getElementById('homePage').style.display = 'flex';
+            document.getElementById('yinmadPage').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('videoPlayerPage').style.display = 'none';
+            prevPage = 'homePage'; // 更新返回页面
+        }
+        function openYinmadPage() {
+            // 重置所有导航项激活状态
+            document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('.pc-nav-item[onclick="openYinmadPage()"]').classList.add('active');
+            
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('yinmadPage').style.display = 'block';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('videoPlayerPage').style.display = 'none';
+            prevPage = 'yinmadPage'; // 更新返回页面
+        }
+        function openProfilePage() {
+            const storedLogin = localStorage.getItem('isLogin') === 'true';
+            if (!isLogin && !storedLogin) {
+                alert('请先登录');
+                openLoginModal('login');
+                return;
+            }
+            // 重置所有导航项激活状态
+            document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('.pc-nav-item[onclick="openProfilePage()"]').classList.add('active');
+            
+            if (storedLogin) {
+                isLogin = true;
+                document.getElementById('pcLoginArea').style.display = 'none';
+                document.getElementById('pcUploadLink').style.display = 'inline';
+                const username = localStorage.getItem('username') || '我的昵称';
+                document.getElementById('profileUserName').innerText = username;
+                // 确保编辑按钮存在
+                if (document.querySelector('.profile-name .edit-btn') === null) {
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'edit-btn';
+                    editBtn.onclick = openEditProfileModal;
+                    editBtn.title = '编辑资料';
+                    editBtn.innerText = '✏️';
+                    document.getElementById('profileUserName').appendChild(editBtn);
+                }
+            }
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('yinmadPage').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'block';
+            document.getElementById('videoPlayerPage').style.display = 'none';
+            prevPage = 'profilePage'; // 更新返回页面
+        }
+        // 打开视频播放页（记录上一页）
+        function openVideoPlayer(title, upName, videoId) {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('yinmadPage').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('adminPage').style.display = 'none';
+            document.getElementById('videoPlayerPage').style.display = 'block';
+            document.getElementById('playerVideoTitle').textContent = title;
+            document.getElementById('playerUpName').textContent = upName;
+            
+            // 保存当前视频ID
+            window.currentVideoId = videoId;
+            
+            // 添加观看历史
+            if (videoId) {
+                addWatchHistory(videoId, title);
+            }
+        }
+        // 打开管理员页面
+        function openAdminPage() {
+            const uid = localStorage.getItem('uid');
+            if (uid !== '1') {
+                alert('权限不足');
+                return;
+            }
+            
+            // 重置所有导航项激活状态
+            document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
+            document.getElementById('adminLink').classList.add('active');
+            
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('yinmadPage').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('videoPlayerPage').style.display = 'none';
+            document.getElementById('adminPage').style.display = 'block';
+            prevPage = 'adminPage';
+            
+            loadAdminReports();
+        }
+        
+        // 加载管理员报告
+        async function loadAdminReports() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/reports`);
+                const reports = await response.json();
+                
+                const adminReports = document.getElementById('adminReports');
+                adminReports.innerHTML = '';
+                
+                reports.forEach(report => {
+                    const reportCard = document.createElement('div');
+                    reportCard.className = 'video-item';
+                    reportCard.innerHTML = `
+                        <div class="video-cover" style="background-image: url('${report.cover}'); background-size: cover; background-position: center;">
+                        </div>
+                        <div class="video-title">${report.title}</div>
+                        <div style="padding: 8px; font-size: 12px; color: #666;">
+                            UID: ${report.uid}<br>
+                            时间: ${new Date(report.reportTime).toLocaleString()}
+                        </div>
+                        <div style="padding: 0 8px 8px;">
+                            <button class="modal-btn confirm" onclick="deleteVideo('${report.vid}')">删除视频</button>
+                            <button class="modal-btn" onclick="deleteUser('${report.uid}')">删除用户</button>
+                        </div>
+                    `;
+                    adminReports.appendChild(reportCard);
+                });
+            } catch (error) {
+                console.error('加载管理员报告失败:', error);
+            }
+        }
+        
+        // 管理员搜索
+        async function adminSearch() {
+            const query = document.getElementById('adminSearchInput').value;
+            if (!query) {
+                loadAdminReports();
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/search`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const reports = await response.json();
+                
+                const adminReports = document.getElementById('adminReports');
+                adminReports.innerHTML = '';
+                
+                reports.forEach(report => {
+                    const reportCard = document.createElement('div');
+                    reportCard.className = 'video-item';
+                    reportCard.innerHTML = `
+                        <div class="video-cover" style="background-image: url('${report.cover}'); background-size: cover; background-position: center;">
+                        </div>
+                        <div class="video-title">${report.title}</div>
+                        <div style="padding: 8px; font-size: 12px; color: #666;">
+                            UID: ${report.uid}<br>
+                            时间: ${new Date(report.reportTime).toLocaleString()}
+                        </div>
+                        <div style="padding: 0 8px 8px;">
+                            <button class="modal-btn confirm" onclick="deleteVideo('${report.vid}')">删除视频</button>
+                            <button class="modal-btn" onclick="deleteUser('${report.uid}')">删除用户</button>
+                        </div>
+                    `;
+                    adminReports.appendChild(reportCard);
+                });
+            } catch (error) {
+                console.error('管理员搜索失败:', error);
+            }
+        }
+        
+        // 删除视频
+        async function deleteVideo(vid) {
+            if (!confirm('确定要删除这个视频吗？')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/delete/video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ vid })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('视频删除成功');
+                    loadAdminReports();
+                } else {
+                    alert('删除失败');
+                }
+            } catch (error) {
+                console.error('删除视频失败:', error);
+                alert('删除失败');
+            }
+        }
+        
+        // 删除用户
+        async function deleteUser(uid) {
+            if (!confirm('确定要删除这个用户吗？这将删除用户的所有视频和数据。')) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/delete/user`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('用户删除成功');
+                    loadAdminReports();
+                } else {
+                    alert('删除失败');
+                }
+            } catch (error) {
+                console.error('删除用户失败:', error);
+                alert('删除失败');
+            }
+        }
+        
+        // 返回功能
+        function goBack() {
+            document.getElementById('videoPlayerPage').style.display = 'none';
+            document.getElementById(prevPage).style.display = prevPage === 'homePage' ? 'flex' : 'block';
+            // 恢复上一页导航激活状态
+            document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
+            if (prevPage === 'adminPage') {
+                document.getElementById('adminLink').classList.add('active');
+            } else {
+                document.querySelector(`.pc-nav-item[onclick="open${prevPage.charAt(0).toUpperCase() + prevPage.slice(1)}()"]`).classList.add('active');
+            }
+        }
+        // 个人中心标签切换
+        function showProfileTab(tabId) {
+            document.querySelectorAll('.profile-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.profile-content-item').forEach(item => item.classList.remove('active'));
+            document.querySelector(`.profile-tab[onclick="showProfileTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(`profile${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`).classList.add('active');
+        }
+        // 播放器功能（适配宽高比容器）
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const progressThumb = document.getElementById('progressThumb');
+        const timeDisplay = document.getElementById('timeDisplay');
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            document.querySelector('.play-btn').innerText = isPlaying ? '⏸' : '▶';
+        }
+        ['mousedown', 'touchstart'].forEach(evt => {
+            progressBar?.addEventListener(evt, (e) => {
+                isDragging = true;
+                updateProgress(e);
+            });
+        });
+        ['mousemove', 'touchmove'].forEach(evt => {
+            document.addEventListener(evt, (e) => {
+                if (isDragging) updateProgress(e);
+            });
+        });
+        ['mouseup', 'touchend', 'mouseleave'].forEach(evt => {
+            document.addEventListener(evt, () => {
+                isDragging = false;
+            });
+        });
+        function updateProgress(e) {
+            if (!progressBar) return;
+            const rect = progressBar.getBoundingClientRect();
+            let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            let percent = (clientX - rect.left) / rect.width;
+            percent = Math.max(0, Math.min(1, percent));
+            currentTime = percent * videoDuration;
+            updateProgressUI();
+        }
+        function updateProgressUI() {
+            if (!progressFill || !progressThumb || !timeDisplay) return;
+            const percent = currentTime / videoDuration * 100;
+            progressFill.style.width = `${percent}%`;
+            progressThumb.style.left = `${percent}%`;
+            const formatTime = (t) => {
+                const min = Math.floor(t / 60);
+                const sec = Math.floor(t % 60);
+                return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+            };
+            timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(videoDuration)}`;
+        }
+        // 弹幕功能
+        function toggleDanmuPanel() {
+            const panel = document.getElementById('danmuPanel');
+            panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
+        }
+        async function sendDanmu() {
+            const text = document.getElementById('danmuText').value.trim();
+            if (!text) return;
+            
+            const uid = localStorage.getItem('uid');
+            if (!uid) {
+                alert('请先登录');
+                return;
+            }
+            
+            const color = document.getElementById('danmuColor').value;
+            const size = document.getElementById('danmuSize').value + 'px';
+            
+            // 发送弹幕到后端
+            try {
+                // 这里需要获取当前播放的视频ID
+                const currentVideoId = 'current_video_id'; // 需要从全局变量获取
+                
+                const response = await fetch(`${API_BASE}/danmaku`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        vid: currentVideoId,
+                        uid: uid,
+                        content: text,
+                        time: 0,
+                        color: color
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    // 显示弹幕
+                    const danmu = document.createElement('div');
+                    danmu.innerText = text;
+                    const playerHeight = document.getElementById('playerContainer').offsetHeight;
+                    danmu.style.cssText = `position: absolute; color: ${color}; font-size: ${size}; white-space: nowrap; top: ${Math.random() * (playerHeight - 40)}px; right: 0;`;
+                    document.getElementById('playerContainer').appendChild(danmu);
+                    
+                    let pos = 0;
+                    const timer = setInterval(() => {
+                        pos += 3;
+                        danmu.style.right = pos + 'px';
+                        if (pos > document.getElementById('playerContainer').offsetWidth) {
+                            clearInterval(timer);
+                            danmu.remove();
+                        }
+                    }, 30);
+                    document.getElementById('danmuText').value = '';
+                } else {
+                    alert(result.error || '发送弹幕失败');
+                }
+            } catch (error) {
+                console.error('发送弹幕失败:', error);
+                alert('发送弹幕失败');
+            }
+        }
+        // 订阅功能
+        function toggleSubscribe() {
+            const btn = document.getElementById('subscribeBtn');
+            btn.classList.toggle('active');
+            btn.textContent = btn.classList.contains('active') ? '已订阅' : '订阅';
+        }
+        // 点赞功能
+        function toggleLike() {
+            const btn = document.getElementById('likeBtn');
+            const countElement = document.getElementById('likeCount');
+            let count = parseInt(countElement.textContent);
+            
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                count--;
+                showNotification('已取消点赞');
+            } else {
+                btn.classList.add('active');
+                count++;
+                showNotification('点赞成功！');
+                // 点赞动画效果
+                const icon = btn.querySelector('.action-icon');
+                icon.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 200);
+            }
+            
+            // 更新计数显示
+            if (count >= 10000) {
+                countElement.textContent = (count / 10000).toFixed(1) + '万';
+            } else {
+                countElement.textContent = count;
+            }
+        }
+        // 收藏功能
+        function toggleFavorite() {
+            const btn = document.getElementById('favoriteBtn');
+            const countElement = document.getElementById('favoriteCount');
+            let count = parseInt(countElement.textContent);
+            
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                count--;
+                showNotification('已取消收藏');
+            } else {
+                btn.classList.add('active');
+                count++;
+                showNotification('收藏成功！');
+                // 收藏动画效果
+                const icon = btn.querySelector('.action-icon');
+                icon.style.transform = 'rotate(72deg) scale(1.2)';
+                setTimeout(() => {
+                    icon.style.transform = 'rotate(0deg) scale(1)';
+                }, 300);
+            }
+            
+            // 更新计数显示
+            countElement.textContent = count;
+        }
+        // 分享功能
+        function shareVideo() {
+            // 复制当前页面链接到剪贴板
+            const videoTitle = document.getElementById('playerVideoTitle').textContent;
+            const shareText = `推荐一个视频：${videoTitle}`;
+            
+            // 创建临时输入框用于复制
+            const tempInput = document.createElement('input');
+            tempInput.value = window.location.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            showNotification('链接已复制到剪贴板！');
+        }
+        // 通知提示功能
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 4px;
+                font-size: 14px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            // 添加动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes slideOut {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // 添加到页面
+            document.body.appendChild(notification);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 2000);
+        }
+        // 上传功能
+        function openUploadModal() {
+            const storedLogin = localStorage.getItem('isLogin') === 'true';
+            if (!isLogin && !storedLogin) {
+                alert('请先登录');
+                openLoginModal('login');
+                return;
+            }
+            document.getElementById('uploadModal').style.display = 'block';
+        }
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            document.getElementById('uploadTitle').value = '';
+            document.getElementById('uploadCoverInput').value = '';
+            document.getElementById('uploadCoverPreview').style.display = 'none';
+            document.getElementById('uploadVideoInput').value = '';
+        }
+        function doUpload() {
+            const title = document.getElementById('uploadTitle').value;
+            if (!title) {
+                alert('请输入视频标题');
+                return;
+            }
+            alert('视频上传成功（模拟）');
+            closeUploadModal();
+        }
+        // 修改个人资料相关功能
+        function openEditProfileModal() {
+            // 提取纯昵称（排除编辑按钮）
+            const currentName = document.getElementById('profileUserName').innerText.trim();
+            document.getElementById('newNickname').value = currentName;
+            document.getElementById('editProfileModal').style.display = 'block';
+        }
+        function closeEditProfileModal() {
+            document.getElementById('editProfileModal').style.display = 'none';
+            document.getElementById('editAvatarPreview').style.display = 'none';
+            document.getElementById('editAvatarInput').value = '';
+        }
+        function previewEditAvatar() {
+            const file = document.getElementById('editAvatarInput').files[0];
+            if (!file) return;
+            const preview = document.getElementById('editAvatarPreview');
+            const reader = new FileReader();
+            reader.onload = e => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        function saveProfileChanges() {
+            const newName = document.getElementById('newNickname').value.trim();
+            if (!newName) {
+                alert('昵称不能为空');
+                return;
+            }
+            // 更新昵称显示（保留编辑按钮）
+            document.getElementById('profileUserName').innerText = newName;
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-btn';
+            editBtn.onclick = openEditProfileModal;
+            editBtn.title = '编辑资料';
+            editBtn.innerText = '✏️';
+            document.getElementById('profileUserName').appendChild(editBtn);
+            
+            localStorage.setItem('username', newName);
+            // 更新头像（若有更换）
+            const preview = document.getElementById('editAvatarPreview');
+            if (preview.style.display === 'block') {
+                document.querySelector('.profile-avatar').style.backgroundImage = `url(${preview.src})`;
+                document.querySelector('.profile-avatar').innerText = ''; // 清空默认文字
+            }
+            alert('修改成功');
+            closeEditProfileModal();
+        }
+        // API配置
+        const API_BASE = 'https://acfun-backend.nuoma233.workers.dev';
+        
+        // 获取认证头
+        function getAuthHeaders() {
+            const uid = localStorage.getItem('uid');
+            return uid ? { 'X-User-UID': uid } : {};
+        }
+        
+        // 加载视频列表
+        async function loadVideos(category = '') {
+            try {
+                const url = category ? `${API_BASE}/search` : `${API_BASE}/search`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: category || '' })
+                });
+                const videos = await response.json();
+                
+                const videoGrid = document.querySelector('.video-grid');
+                videoGrid.innerHTML = '';
+                
+                videos.forEach(video => {
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    videoItem.onclick = () => openVideoPlayer(video.title, `UID:${video.uid}`, video.vid);
+                    
+                    videoItem.innerHTML = `
+                        <div class="video-cover" style="background-image: url('${video.cover}'); background-size: cover; background-position: center;">
+                        </div>
+                        <div class="video-title">${video.title}</div>
+                    `;
+                    
+                    videoGrid.appendChild(videoItem);
+                });
+            } catch (error) {
+                console.error('加载视频失败:', error);
+            }
+        }
+        
+        // 加载名人堂数据
+        async function loadFameList() {
+            try {
+                // 暂时显示测试数据，后续可以从API获取
+                const fameList = document.getElementById('fameList');
+                fameList.innerHTML = `
+                    <li>测试UP1 - 1000粉丝</li>
+                    <li>测试UP2 - 800粉丝</li>
+                    <li>测试UP3 - 600粉丝</li>
+                    <li>测试UP4 - 400粉丝</li>
+                    <li>测试UP5 - 200粉丝</li>
+                `;
+            } catch (error) {
+                console.error('加载名人堂失败:', error);
+            }
+        }
+        
+        // 加载分类数据
+        async function loadCategories() {
+            try {
+                const categoryList = document.getElementById('categoryList');
+                categoryList.innerHTML = '';
+                
+                const categories = ['番剧', '音乐', '游戏', '演唱会', '音mad'];
+                categories.forEach(category => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `${category} · 分类`;
+                    li.onclick = () => loadVideos(category);
+                    categoryList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('加载分类失败:', error);
+            }
+        }
+        
+        // 用户注册
+        async function doRegister() {
+            const user = document.getElementById('regUser').value;
+            const pwd = document.getElementById('regPwd').value;
+            const captcha = document.getElementById('regCaptcha').value.toUpperCase();
+            
+            if (captcha !== currentRegCaptcha || !user || !pwd) {
+                alert('验证码错误或信息不全');
+                refreshRegCaptcha();
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pwd })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('注册成功，请登录');
+                    closeLoginModal();
+                    openLoginModal('login');
+                } else {
+                    alert(data.error || '注册失败');
+                }
+            } catch (error) {
+                console.error('注册失败:', error);
+                alert('注册失败');
+            }
+        }
+        
+        // 用户登录
+        async function doMobileLogin() {
+            const user = document.getElementById('mobileLoginUser').value;
+            const pwd = document.getElementById('mobileLoginPwd').value;
+            const captcha = document.getElementById('mobileLoginCaptcha').value.toUpperCase();
+            
+            if (captcha !== currentCaptcha || !user || !pwd) {
+                alert('验证码错误或信息不全');
+                refreshCaptcha();
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pwd })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    isLogin = true;
+                    localStorage.setItem('isLogin', 'true');
+                    localStorage.setItem('username', user);
+                    localStorage.setItem('uid', data.uid);
+                    
+                    document.getElementById('pcLoginArea').style.display = 'none';
+                    document.getElementById('pcUploadLink').style.display = 'inline';
+                    document.getElementById('profileUserName').innerText = user;
+                    
+                    // 显示UID
+                    const uidSpan = document.createElement('span');
+                    uidSpan.style.cssText = 'font-size:12px;color:#666;margin-left:8px;';
+                    uidSpan.innerText = `UID:${data.uid}`;
+                    document.getElementById('profileUserName').appendChild(uidSpan);
+                    
+                    // 如果是管理员，显示管理菜单
+                    if (data.uid === '1') {
+                        document.getElementById('adminLink').style.display = 'inline';
+                    }
+                    
+                    alert('登录成功');
+                    closeLoginModal();
+                } else {
+                    alert(data.error || '登录失败');
+                }
+            } catch (error) {
+                console.error('登录失败:', error);
+                alert('登录失败');
+            }
+        }
+        
+        // 视频上传（爬取Acfun视频）
+        async function doUpload() {
+            const title = document.getElementById('uploadTitle').value;
+            const category = document.getElementById('uploadCategory').value;
+            const uid = localStorage.getItem('uid');
+            
+            if (!title) {
+                alert('请输入Acfun视频ID');
+                return;
+            }
+            
+            if (!uid) {
+                alert('请先登录');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/crawl`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        acId: title,
+                        uid: uid
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('视频爬取成功');
+                    closeUploadModal();
+                    loadVideos(); // 重新加载视频列表
+                } else {
+                    alert(data.error || '爬取失败');
+                }
+            } catch (error) {
+                console.error('爬取失败:', error);
+                alert('爬取失败');
+            }
+        }
+        
+        // 打开视频播放页
+        function openVideoPlayer(title, upName, videoId) {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('yinmadPage').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('videoPlayerPage').style.display = 'block';
+            document.getElementById('playerVideoTitle').textContent = title;
+            document.getElementById('playerUpName').textContent = upName;
+            
+            // 添加观看历史
+            if (videoId) {
+                addWatchHistory(videoId, title);
+            }
+        }
+        
+        // 添加观看历史
+        async function addWatchHistory(videoId, title) {
+            try {
+                const uid = localStorage.getItem('uid');
+                if (!uid) return;
+                
+                // 这里需要实现观看历史功能，暂时跳过
+                console.log('添加观看历史:', videoId, title);
+            } catch (error) {
+                console.error('添加观看历史失败:', error);
+            }
+        }
+        
+        // 页面加载恢复登录状态
+        window.onload = function() {
+            updateProgressUI();
+            const storedLogin = localStorage.getItem('isLogin') === 'true';
+            const username = localStorage.getItem('username');
+            const uid = localStorage.getItem('uid');
+            
+            if (storedLogin && username) {
+                isLogin = true;
+                document.getElementById('pcLoginArea').style.display = 'none';
+                document.getElementById('pcUploadLink').style.display = 'inline';
+                document.getElementById('profileUserName').innerText = username;
+                
+                // 显示UID
+                if (uid) {
+                    const uidSpan = document.createElement('span');
+                    uidSpan.style.cssText = 'font-size:12px;color:#666;margin-left:8px;';
+                    uidSpan.innerText = `UID:${uid}`;
+                    document.getElementById('profileUserName').appendChild(uidSpan);
+                    
+                    // 如果是管理员，显示管理菜单
+                    if (uid === '1') {
+                        document.getElementById('adminLink').style.display = 'inline';
+                    }
+                }
+                
+                // 添加编辑按钮
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.onclick = openEditProfileModal;
+                editBtn.title = '编辑资料';
+                editBtn.innerText = '✏️';
+                document.getElementById('profileUserName').appendChild(editBtn);
+            }
+            
+            // 加载数据
+            loadVideos();
+            loadFameList();
+            loadCategories();
+        };
+    </script>
+</body>
+</html>
