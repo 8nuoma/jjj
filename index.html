@@ -1,11 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MikuFans </title>
+    <title>mrtalk</title>
     <style>
-        /* 全局样式：精简冗余，移除宽高限制，保留自适应 */
         * {
             margin: 0;
             padding: 0;
@@ -15,12 +15,11 @@
         body {
             background-color: #F5F5F5;
             font-size: 12px;
-            margin: 0 auto; /* 仅保留居中，删除 max-width/min-width */
+            margin: 0 auto;
         }
-        /* 顶部栏 */
         .top-bar {
             background-color: #FFFFCC;
-            border-bottom: 2px solid #FF5533; /* 改为橙红色 */
+            border-bottom: 2px solid #FF5533;
             padding: 5px 20px;
             display: flex;
             align-items: center;
@@ -34,7 +33,7 @@
         .logo-img {
             width: 40px;
             height: 40px;
-            background: #FF5533; /* 改为橙红色 */
+            background: #FF5533;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -49,9 +48,8 @@
             color: #000;
         }
         .logo-text span {
-            color: #FF5533; /* 改为橙红色 */
+            color: #FF5533;
         }
-        /* PC登录区（仅保留电脑版） */
         .pc-login-area {
             display: flex;
             align-items: center;
@@ -96,11 +94,34 @@
             text-decoration: underline;
             cursor: pointer;
         }
-        /* PC导航栏 */
         .pc-nav-bar {
             background-color: #F0F0F0;
             border-bottom: 1px solid #ccc;
             padding: 8px 20px;
+            display: flex;
+            align-items: center;
+        }
+        .upload-btn {
+            padding: 6px 12px;
+            background-color: #FF5533;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            margin-right: 20px;
+        }
+        .upload-btn:hover {
+            background-color: #FF7733;
+        }
+        .upload-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
         }
         .pc-nav-item {
             color: #000;
@@ -109,7 +130,7 @@
             font-size: 14px;
         }
         .pc-nav-item.active {
-            color: #FF5533; /* 改为橙红色 */
+            color: #FF5533;
             font-weight: bold;
         }
         .upload-link {
@@ -120,7 +141,6 @@
             font-size: 14px;
             display: none;
         }
-        /* 搜索区：删除搜索框最大宽度限制 */
         .search-section {
             padding: 8px 20px;
             background-color: #E0E0E0;
@@ -160,21 +180,18 @@
             transform: translateY(1px);
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
-        /* 内容区：删除最大宽度限制，保留弹性布局 */
         .content {
             padding: 20px;
             margin: 0 auto;
             display: flex;
             gap: 20px;
         }
-        /* 视频列表容器 */
         .video-container {
-            flex: 4; /* 固定比例，不被拉伸 */
+            flex: 4;
         }
-        /* 视频列表 */
         .video-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* 优化卡片宽度，适配宽屏 */
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 15px;
         }
         .video-item {
@@ -209,10 +226,9 @@
             padding: 0 8px 8px;
             font-size: 13px;
         }
-        /* 侧边栏（仅PC端显示）：删除宽高限制，保留弹性比例 */
         .side-bar {
             display: block;
-            flex: 1; /* 仅保留弹性比例，删除 min-width/max-width */
+            flex: 1;
         }
         .side-card {
             background-color: #fff;
@@ -222,7 +238,7 @@
             overflow: hidden;
         }
         .card-title {
-            background-color: #FF5533; /* 改为橙红色 */
+            background-color: #FF5533;
             color: #fff;
             padding: 5px 10px;
             font-weight: bold;
@@ -238,9 +254,8 @@
             transition: color 0.2s;
         }
         .card-list li:hover {
-            color: #FF5533; /* 改为橙红色 */
+            color: #FF5533;
         }
-        /* 个人中心页面：删除最大宽度限制 */
         #profilePage {
             display: none;
             padding: 20px;
@@ -262,8 +277,8 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            border: 2px solid #FF5533; /* 改为橙红色 */
-            background: #FF5533; /* 改为橙红色 */
+            border: 2px solid #FF5533;
+            background: #FF5533;
             color: white;
             display: flex;
             align-items: center;
@@ -282,7 +297,6 @@
             display: flex;
             align-items: center;
         }
-        /* 优化：小巧的编辑按钮（安卓风格） */
         .edit-btn {
             margin-left: 8px;
             width: 24px;
@@ -368,29 +382,26 @@
         .profile-content-item.active {
             display: block;
         }
-        /* 视频播放页：保留16:9宽高比，删除最大宽度限制 */
         #videoPlayerPage {
             display: none;
             padding: 20px;
             margin: 0 auto;
         }
-        /* 视频播放页面布局 - B站同款布局 */
         .video-player-content {
             display: flex;
             gap: 20px;
-            max-width: 1920px; /* B站最大宽度 */
+            max-width: 1920px;
             margin: 0 auto;
         }
         .main-player-section {
             flex: 1;
             min-width: 0;
-            max-width: 1280px; /* B站播放器最大宽度 */
+            max-width: 1280px;
         }
         .related-videos {
-            width: 360px; /* B站侧边栏固定宽度 */
+            width: 360px;
             flex-shrink: 0;
         }
-        /* 返回按钮样式 - 安卓风格 */
         .back-btn {
             margin-bottom: 15px;
             padding: 8px 16px;
@@ -414,25 +425,22 @@
             transform: translateY(1px);
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
-        /* 播放器容器：B站同款尺寸，保持16:9宽高比 */
         .player-container {
             position: relative;
             width: 100%;
-            max-width: 1280px; /* B站最大宽度 */
+            max-width: 1280px;
             height: 0;
-            padding-bottom: 56.25%; /* 16:9 宽高比（56.25% = 9/16） */
+            padding-bottom: 56.25%;
             background-color: #000;
-            border-radius: 8px; /* B站圆角样式 */
+            border-radius: 8px;
             margin-bottom: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* B站阴影效果 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        /* 播放器内部元素绝对定位，适应宽高比容器 */
         .player-controls, .danmu-btn, .danmu-panel {
             position: absolute;
             z-index: 10;
         }
-        /* 播放器控制栏 - B站风格 */
         .player-controls {
             position: absolute;
             bottom: 0;
@@ -487,11 +495,6 @@
             background-color: rgba(255,255,255,0.2);
             border-color: rgba(255,255,255,0.4);
         }
-        .play-btn:hover {
-            background-color: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.5);
-        }
-        /* 可拖动进度条 */
         .progress-container {
             flex: 1;
             display: flex;
@@ -518,7 +521,7 @@
             top: 0;
             height: 100%;
             width: 30%;
-            background-color: #fb7299; /* B站粉色 */
+            background-color: #fb7299;
             border-radius: 3px;
             transition: width 0.1s ease;
         }
@@ -538,7 +541,6 @@
             min-width: 80px;
             text-align: right;
         }
-        /* 弹幕功能 - B站风格圆形按钮 */
         .danmu-btn {
             position: absolute;
             right: 20px;
@@ -661,7 +663,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #FF5533; /* 改为橙红色 */
+            background: #FF5533;
             color: white;
             display: flex;
             align-items: center;
@@ -700,7 +702,6 @@
             color: #505050;
             border-color: #d0d0d0;
         }
-        /* 视频操作按钮（点赞、收藏、分享） */
         .video-actions {
             display: flex;
             gap: 15px;
@@ -743,7 +744,6 @@
             font-size: 13px;
             color: #999;
         }
-        /* 点赞按钮激活状态 - 红色 */
         .like-btn.active {
             background-color: #fff;
             border-color: #ff6666;
@@ -758,7 +758,6 @@
         .like-btn.active .action-count {
             color: #ff6666;
         }
-        /* 收藏按钮激活状态 - 黄色 */
         .favorite-btn.active {
             background-color: #fff;
             border-color: #ffb800;
@@ -773,13 +772,11 @@
         .favorite-btn.active .action-count {
             color: #ffb800;
         }
-        /* 分享按钮样式 */
         .share-btn:hover {
             background-color: #f0f8ff;
             border-color: #4a90e2;
             color: #4a90e2;
         }
-        /* 推荐视频区（右侧布局） */
         .related-videos {
             background-color: #fff;
             border: 1px solid #ccc;
@@ -795,7 +792,6 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 8px;
         }
-        /* 推荐视频列表样式 */
         .related-video-list {
             display: flex;
             flex-direction: column;
@@ -851,7 +847,6 @@
             font-size: 12px;
             color: #999;
         }
-        /* 登录/注册/修改资料弹窗：修复验证码压缩 */
         .login-modal {
             display: none;
             position: fixed;
@@ -859,7 +854,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #fff;
-            border: 2px solid #FF5533; /* 改为橙红色 */
+            border: 2px solid #FF5533;
             padding: 20px;
             z-index: 999;
             border-radius: 6px;
@@ -897,20 +892,18 @@
             align-items: center;
             gap: 10px;
         }
-        /* 修复验证码画布压缩：固定宽高，禁止缩放 */
         #captchaCanvas, #regCaptchaCanvas, #mobileLoginCaptchaCanvas {
             width: 100px;
             height: 36px;
             border: 1px solid #e0e0e0;
             cursor: pointer;
             border-radius: 4px;
-            object-fit: none; /* 禁止拉伸 */
+            object-fit: none;
             transition: all 0.2s ease;
         }
         #captchaCanvas:hover, #regCaptchaCanvas:hover, #mobileLoginCaptchaCanvas:hover {
             border-color: #c0c0c0;
         }
-        /* 安卓风格select下拉框 */
         .android-select {
             padding: 8px 12px;
             border: 1px solid #e0e0e0;
@@ -929,7 +922,6 @@
         .android-select:hover {
             border-color: #c0c0c0;
         }
-        /* 安卓风格输入框 */
         .android-input {
             padding: 8px 12px;
             border: 1px solid #e0e0e0;
@@ -948,7 +940,6 @@
         .android-input:hover {
             border-color: #c0c0c0;
         }
-        /* 头像上传 */
         .file-input-wrap {
             display: inline-block;
             position: relative;
@@ -992,7 +983,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            border: 1px solid #FF5533; /* 改为橙红色 */
+            border: 1px solid #FF5533;
             margin: 10px 0 0 85px;
             display: none;
             object-fit: cover;
@@ -1050,21 +1041,6 @@
             background-color: #f8f8f8;
             border-color: #c0c0c0;
         }
-        /* 上传弹窗 */
-        .upload-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            border: 2px solid #FF5533; /* 改为橙红色 */
-            padding: 20px;
-            z-index: 999;
-            border-radius: 6px;
-            width: 400px;
-        }
-        /* 音mad页面样式：删除最大宽度限制 */
         #yinmadPage {
             display: none;
             padding: 20px;
@@ -1078,7 +1054,7 @@
             margin-bottom: 20px;
         }
         .yinmad-header h2 {
-            color: #FF5533; /* 改为橙红色 */
+            color: #FF5533;
             font-size: 18px;
             margin-bottom: 10px;
         }
@@ -1090,131 +1066,117 @@
     </style>
 </head>
 <body>
-    <!-- 顶部栏 -->
     <div class="top-bar">
         <div class="logo">
-            <div class="logo-img">M</div>
-            <div class="logo-text"><span>M</span>iku<span>Fans</span></div>
+            <div class="logo-img">
+                <img src="s.gif" alt="m" style="width: 40px; height: 40px; border-radius: 50%;">
+            </div>
+            <div class="logo-text">mrtalk</div>
         </div>
         <div class="pc-login-area" id="pcLoginArea">
-            用户: <input type="text" id="pcLoginUser" placeholder="输入用户名">
+            用户: <input type="text" id="pcLoginUser" placeholder="输入用户�?>
             密码: <input type="password" id="pcLoginPwd" placeholder="输入密码">
-            验证码: <input type="text" id="pcLoginCaptcha" size="4" placeholder="验证码">
+            验证�? <input type="text" id="pcLoginCaptcha" size="4" placeholder="验证�?>
             <canvas id="captchaCanvas" onclick="refreshCaptcha()"></canvas>
             <button class="login-btn" onclick="doLogin()">登录</button>
             <span class="login-link" onclick="openLoginModal('register')">注册</span>
         </div>
     </div>
-    <!-- PC导航栏（已添加音mad选项） -->
     <div class="pc-nav-bar">
+        <button class="upload-btn" onclick="openUploadModal()" title="投稿视频">投稿</button>
         <a href="#" class="pc-nav-item active" onclick="openHomePage()">首页</a>
         <a href="#" class="pc-nav-item">番剧</a>
         <a href="#" class="pc-nav-item">音乐</a>
         <a href="#" class="pc-nav-item">游戏</a>
-        <a href="#" class="pc-nav-item" onclick="openYinmadPage()">音mad</a> <!-- 新增音mad导航项 -->
-        <a href="#" class="upload-link" id="pcUploadLink" onclick="openUploadModal()">投稿上传</a>
-        <a href="#" class="pc-nav-item" id="adminLink" onclick="openAdminPage()" style="display: none;">管理</a>
+        <a href="#" class="pc-nav-item" onclick="openYinmadPage()">音mad</a>
+        
         <a href="#" class="pc-nav-item" onclick="openProfilePage()">我的</a>
+        <a href="#" class="pc-nav-item" id="adminSystemLink" onclick="openAdminSystemPage()" style="display: none;">信息系统</a>
     </div>
-    <!-- 搜索区 -->
     <div class="search-section">
-        <input type="text" class="search-input" placeholder="搜索视频、UP主...">
+        <input type="text" class="search-input" placeholder="搜索视频、UP�?..">
         <button class="search-btn">搜索</button>
     </div>
-    <!-- 首页内容 -->
     <div class="content" id="homePage">
         <div class="video-container">
             <div class="video-grid">
-                <!-- 视频列表将通过API动态加载 -->
             </div>
         </div>
         <div class="side-bar">
-            <div class="side-card">
-                <div class="card-title">名人堂</div>
-                <ul class="card-list" id="fameList">
-                    <!-- 名人堂数据将通过API动态加载 -->
-                </ul>
-            </div>
-            <div class="side-card">
-                <div class="card-title">热门分类</div>
-                <ul class="card-list" id="categoryList">
-                    <!-- 分类数据将通过API动态加载 -->
-                </ul>
-            </div>
         </div>
     </div>
-    <!-- 音mad页面（新增完整页面） -->
     <div id="yinmadPage">
         <div class="yinmad-header">
             <h2>音mad分区</h2>
             <div class="yinmad-desc">
                 汇集Vocaloid相关音mad作品，包含经典曲目remix、鬼畜改编、节奏向混剪等内容，
-                感受音乐与创意的碰撞！
-            </div>
+                感受音乐与创意的碰撞�?            </div>
         </div>
         <div class="content">
             <div class="video-container">
                 <div class="video-grid">
-                    <!-- 音mad视频列表将通过API动态加载 -->
                 </div>
             </div>
             <div class="side-bar">
-                <div class="side-card">
-                    <div class="card-title">音mad热门标签</div>
-                    <ul class="card-list" id="yinmadTagsList">
-                        <!-- 音mad标签将通过API动态加载 -->
-                    </ul>
-                </div>
-                <div class="side-card">
-                    <div class="card-title">音mad大神推荐</div>
-                    <ul class="card-list" id="yinmadCreatorsList">
-                        <!-- 音mad创作者将通过API动态加载 -->
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
-    <!-- 管理员页面 -->
-    <div id="adminPage" style="display: none;">
+    <div id="adminSystemPage" style="display: none;">
         <div class="yinmad-header">
-            <h2>管理员信息系统</h2>
-            <div class="yinmad-desc">
-                管理用户上传的视频内容，24小时后自动删除
+            <h2 id="adminSystemTitle">信息系统</h2>
+            <div class="yinmad-desc" id="adminSystemDesc">
             </div>
         </div>
-        <div class="search-section">
-            <input type="text" class="search-input" id="adminSearchInput" placeholder="搜索用户UID或视频标题...">
-            <button class="search-btn" onclick="adminSearch()">搜索</button>
+        
+        <div id="adminFunctions" style="display: none;">
+            <div class="search-section">
+                <input type="text" class="search-input" id="adminSearchInput" placeholder="搜索用户UID或视频标�?..">
+                <button class="search-btn" onclick="adminSearch()">搜索</button>
+                <button class="search-btn" onclick="loadPendingVideos()">待审核视�?/button>
+                <button class="search-btn" onclick="loadUserList()">用户管理</button>
+                <button class="search-btn" onclick="createChristmasVideo()">圣诞视频</button>
+                <button class="search-btn" onclick="initializeData()">初始化数�?/button>
+                <button class="search-btn" onclick="clearAllData()">清理数据</button>
+                <button class="search-btn" onclick="loadSystemStats()">系统统计</button>
+            </div>
         </div>
+        
+        <div id="userNotice" style="display: none;">
+            <div class="yinmad-header">
+                <h3>🚧 功能开发中</h3>
+                <div class="yinmad-desc">
+                    信息系统正在开发中，即将上线更多精彩功能！<br>
+                    敬请期待：个人数据中心、观看历史、收藏管理、投稿统计等功能�?                </div>
+            </div>
+        </div>
+        
         <div class="content">
             <div class="video-container">
-                <div class="video-grid" id="adminReports">
-                    <!-- 管理员报告将通过API动态加载 -->
+                <div class="video-grid" id="adminSystemContent">
                 </div>
             </div>
         </div>
     </div>
-    <!-- 个人中心页面 -->
     <div id="profilePage" style="display: none;">
         <div class="profile-header">
             <div class="profile-avatar-container">
                 <div class="profile-avatar">U</div>
                 <div class="profile-info">
-                    <!-- 优化：小巧的编辑按钮（图标样式） -->
                     <div class="profile-name" id="profileUserName">我的昵称
                         <button class="edit-btn" onclick="openEditProfileModal()" title="编辑资料">✏️</button>
                     </div>
+                    <div class="profile-uid" id="profileUserUid" style="font-size: 12px; color: #666; margin-bottom: 10px;">UID: --</div>
                     <div class="profile-stats">
                         <div class="profile-stat-item">
-                            <div class="profile-stat-value">12</div>
+                            <div class="profile-stat-value" id="followersCount">0</div>
                             <div class="profile-stat-name">粉丝</div>
                         </div>
                         <div class="profile-stat-item">
-                            <div class="profile-stat-value">5</div>
+                            <div class="profile-stat-value" id="followingCount">0</div>
                             <div class="profile-stat-name">关注</div>
                         </div>
                         <div class="profile-stat-item">
-                            <div class="profile-stat-value">3</div>
+                            <div class="profile-stat-value" id="worksCount">0</div>
                             <div class="profile-stat-name">作品</div>
                         </div>
                     </div>
@@ -1230,34 +1192,29 @@
         <div class="profile-content">
             <div class="profile-content-item active" id="profileHistory">
                 <div class="video-grid">
-                    <!-- 观看历史将通过API动态加载 -->
                 </div>
             </div>
             <div class="profile-content-item" id="profileFavorites">
                 <div class="video-grid">
-                    <!-- 收藏列表将通过API动态加载 -->
                 </div>
             </div>
             <div class="profile-content-item" id="profileFollows">
                 <div class="video-grid">
-                    <!-- 关注列表将通过API动态加载 -->
                 </div>
             </div>
             <div class="profile-content-item" id="profileWorks">
                 <div class="video-grid">
-                    <!-- 作品列表将通过API动态加载 -->
                 </div>
             </div>
         </div>
     </div>
-    <!-- 视频播放页：新增返回按钮+推荐视频区 -->
     <div id="videoPlayerPage" style="display: none;">
-        <button class="back-btn" onclick="goBack()">← 返回</button>
+        <button class="back-btn" onclick="goBack()">�?返回</button>
         <div class="video-player-content">
             <div class="main-player-section">
                 <div class="player-container" id="playerContainer">
             <div class="player-controls">
-                <button class="android-btn play-btn" onclick="togglePlay()">▶</button>
+                <button class="android-btn play-btn" onclick="togglePlay()">�?/button>
                 <div class="progress-container">
                     <div class="progress-bar" id="progressBar">
                         <div class="progress-fill" id="progressFill"></div>
@@ -1268,41 +1225,40 @@
                 <button class="android-btn volume-btn">🔊</button>
                 <button class="android-btn download-btn" onclick="downloadVideo()">📥</button>
             </div>
-            <button class="danmu-btn" onclick="toggleDanmuPanel()">弹</button>
+            <button class="danmu-btn" onclick="toggleDanmuPanel()">�?/button>
             <div class="danmu-panel" id="danmuPanel" style="display: none;">
                 <input type="text" class="danmu-input" placeholder="输入弹幕内容" id="danmuText">
                 <select class="danmu-color android-select" id="danmuColor">
-                    <option value="#ff0000">红</option>
-                    <option value="#00ff00">绿</option>
-                    <option value="#0000ff">蓝</option>
-                    <option value="#ffff00">黄</option>
-                    <option value="#ffffff" selected>白</option>
-                    <option value="#000000">黑</option>
-                    <option value="#FF5533">橙红</option> <!-- 新增橙红色选项 -->
+                    <option value="#ff0000">�?/option>
+                    <option value="#00ff00">�?/option>
+                    <option value="#0000ff">�?/option>
+                    <option value="#ffff00">�?/option>
+                    <option value="#ffffff" selected>�?/option>
+                    <option value="#000000">�?/option>
+                    <option value="#FF5533">橙红</option>
                 </select>
                 <select class="danmu-size android-select" id="danmuSize">
-                    <option value="14">小</option>
-                    <option value="18" selected>中</option>
-                    <option value="24">大</option>
+                    <option value="14">�?/option>
+                    <option value="18" selected>�?/option>
+                    <option value="24">�?/option>
                 </select>
-                <button class="danmu-send-btn" onclick="sendDanmu()">发送</button>
+                <button class="danmu-send-btn" id="danmuSendBtn" onclick="sendDanmu()">发�?/button>
             </div>
         </div>
         <div class="video-meta">
             <div class="player-video-title" id="playerVideoTitle">视频标题</div>
             <div class="up-info">
                 <div class="up-avatar">U</div>
-                <div class="up-name" id="playerUpName">UP主</div>
+                <div class="up-name" id="playerUpName">UP�?/div>
                 <button class="subscribe-btn" id="subscribeBtn" onclick="toggleSubscribe()">订阅</button>
             </div>
-            <!-- 点赞、收藏、分享按钮 -->
             <div class="video-actions">
                 <button class="action-btn like-btn" id="likeBtn" onclick="toggleLike()">
                     <svg class="action-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.85-1.26l3.03-7.08c.09-.23.12-.47.12-.66v-2z"/>
                     </svg>
                     <span class="action-text">点赞</span>
-                    <span class="action-count" id="likeCount">1.2万</span>
+                    <span class="action-count" id="likeCount">1.2�?/span>
                 </button>
                 <button class="action-btn favorite-btn" id="favoriteBtn" onclick="toggleFavorite()">
                     <svg class="action-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -1320,32 +1276,29 @@
             </div>
         </div>
     </div>
-        <!-- 推荐视频区（移到右侧） -->
         <div class="related-videos">
             <div class="related-title">相关推荐</div>
             <div class="related-video-list">
-                <!-- 相关推荐将通过API动态加载 -->
             </div>
         </div>
     </div>
     </div>
-    <!-- 登录/注册弹窗 -->
     <div class="login-modal" id="loginModal">
         <div id="loginForm">
             <div class="modal-title">用户登录</div>
             <div class="form-group">
-                <label>用户名:</label>
-                <input type="text" id="mobileLoginUser" placeholder="输入用户名">
+                <label>用户�?</label>
+                <input type="text" id="mobileLoginUser" placeholder="输入用户�?>
             </div>
             <div class="form-group">
                 <label>密码:</label>
                 <input type="password" id="mobileLoginPwd" placeholder="输入密码">
             </div>
             <div class="form-group">
-                <label>验证码:</label>
+                <label>验证�?</label>
                 <div class="captcha-group">
                     <canvas id="mobileLoginCaptchaCanvas" onclick="refreshCaptcha()"></canvas>
-                    <input type="text" id="mobileLoginCaptcha" size="4" placeholder="验证码">
+                    <input type="text" id="mobileLoginCaptcha" size="4" placeholder="验证�?>
                 </div>
             </div>
             <div class="modal-btns">
@@ -1357,8 +1310,12 @@
         <div id="registerForm" style="display: none;">
             <div class="modal-title">用户注册</div>
             <div class="form-group">
-                <label>用户名:</label>
-                <input type="text" id="regUser" placeholder="设置用户名">
+                <label>用户�?</label>
+                <input type="text" id="regUser" placeholder="设置用户�?>
+            </div>
+            <div class="form-group">
+                <label>邮箱:</label>
+                <input type="email" id="regEmail" placeholder="输入邮箱">
             </div>
             <div class="form-group">
                 <label>密码:</label>
@@ -1374,10 +1331,10 @@
                 <div class="avatar-tip" id="regAvatarTip">预览成功，注册后生效</div>
             </div>
             <div class="form-group">
-                <label>验证码:</label>
+                <label>验证�?</label>
                 <div class="captcha-group">
                     <canvas id="regCaptchaCanvas" onclick="refreshRegCaptcha()"></canvas>
-                    <input type="text" id="regCaptcha" size="4" placeholder="验证码">
+                    <input type="text" id="regCaptcha" size="4" placeholder="验证�?>
                 </div>
             </div>
             <div class="modal-btns">
@@ -1387,12 +1344,11 @@
             <div class="form-switch" onclick="switchForm('login')">已有账号？去登录</div>
         </div>
     </div>
-    <!-- 修改个人资料弹窗 -->
     <div class="login-modal" id="editProfileModal" style="display: none;">
         <div class="modal-title">修改个人资料</div>
         <div class="form-group">
-            <label>新昵称:</label>
-            <input type="text" id="newNickname" placeholder="输入新昵称" value="" class="android-input">
+            <label>新昵�?</label>
+            <input type="text" id="newNickname" placeholder="输入新昵�? value="" class="android-input">
         </div>
         <div class="form-group">
             <label>更换头像:</label>
@@ -1407,30 +1363,71 @@
             <button class="modal-btn confirm" onclick="saveProfileChanges()">保存</button>
         </div>
     </div>
-    <!-- 上传弹窗 -->
-    <div class="upload-modal" id="uploadModal">
-        <div class="modal-title">爬取Acfun视频</div>
+    
+    <div class="login-modal" id="uploadModal" style="display: none; max-width: 600px; width: 90%;">
+        <div class="modal-title">投稿视频</div>
+        
         <div class="form-group">
-            <label>Acfun视频ID:</label>
-            <input type="text" id="uploadTitle" placeholder="输入Acfun视频ID (如: 48026629)" class="android-input">
+            <label>视频标题:</label>
+            <input type="text" id="uploadTitle" placeholder="输入视频标题" class="android-input">
         </div>
+        
         <div class="form-group">
-            <label>分区:</label>
-            <select id="uploadCategory" class="android-select">
-            <option>番剧</option>
-            <option>音乐</option>
-            <option>游戏</option>
-            <option>演唱会</option>
-            <option>音mad</option>
-        </select>
+            <label>视频描述:</label>
+            <textarea id="uploadDescription" placeholder="输入视频描述（可选）" class="android-input" 
+                      style="width: 100%; height: 80px; resize: vertical;"></textarea>
         </div>
+        
+        <div class="form-group">
+            <label>分区选择:<span style="color: red;">*</span></label>
+            <select id="uploadCategory" class="android-select" style="font-weight: bold; color: #FF5533;">
+                <option value="">请选择分区</option>
+                <option value="番剧">番剧</option>
+                <option value="音乐">音乐</option>
+                <option value="游戏">游戏</option>
+                <option value="音mad">音mad</option>
+                <option value="生活">生活</option>
+                <option value="科技">科技</option>
+                <option value="娱乐">娱乐</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>选择视频:</label>
+            <div class="file-input-wrap">
+                <span class="file-input-btn">选择视频</span>
+                <input type="file" class="file-input" accept="video/*" id="uploadVideoInput" onchange="previewVideoFile()">
+            </div>
+            <div id="uploadVideoInfo" style="font-size: 12px; color: #666; margin-top: 5px;"></div>
+        </div>
+        
+        <div class="form-group">
+            <label>选择封面:</label>
+            <div class="file-input-wrap">
+                <span class="file-input-btn">选择封面</span>
+                <input type="file" class="file-input" accept="image/*" id="uploadCoverInput" onchange="previewCoverFile()">
+            </div>
+            <img id="uploadCoverPreview" style="display: none; width: 200px; height: 112px; margin-top: 10px; border-radius: 4px; object-fit: cover;">
+            <div id="uploadCoverInfo" style="font-size: 12px; color: #666; margin-top: 5px;"></div>
+        </div>
+        
+        <div class="form-group">
+            <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                <p>�?视频文件大小限制: 9.9 MB</p>
+                <p>�?封面图片大小限制: 990 KB</p>
+                <p>�?支持的视频格�? MP4, WebM, OGG</p>
+                <p>�?支持的图片格�? JPG, PNG, GIF</p>
+            </div>
+        </div>
+        
         <div class="modal-btns">
             <button class="modal-btn" onclick="closeUploadModal()">取消</button>
-            <button class="modal-btn confirm" onclick="doUpload()">爬取</button>
+            <button class="modal-btn confirm" onclick="submitUpload()">投稿</button>
         </div>
     </div>
+    
     <script>
-        // 核心功能JS
         const captchaCanvas = document.getElementById('captchaCanvas');
         const regCaptchaCanvas = document.getElementById('regCaptchaCanvas');
         const mobileLoginCaptchaCanvas = document.getElementById('mobileLoginCaptchaCanvas');
@@ -1445,7 +1442,6 @@
         let currentTime = 90;
         let isDragging = false;
         let prevPage = 'homePage';
-        // 初始化验证码画布（修复压缩：明确宽高）
         if (mobileLoginCaptchaCtx) {
             mobileLoginCaptchaCanvas.width = 100;
             mobileLoginCaptchaCanvas.height = 36;
@@ -1458,7 +1454,6 @@
             regCaptchaCanvas.width = 100;
             regCaptchaCanvas.height = 36;
         }
-        // 验证码生成
         function generateCaptcha(ctx, isReg = false) {
             if (!ctx) return;
             ctx.clearRect(0, 0, 100, 36);
@@ -1468,7 +1463,6 @@
             let captcha = '';
             for (let i = 0; i < 4; i++) captcha += chars[Math.floor(Math.random() * chars.length)];
             
-            // 干扰线
             for (let i = 0; i < 3; i++) {
                 ctx.beginPath();
                 ctx.moveTo(Math.random()*100, Math.random()*36);
@@ -1476,7 +1470,6 @@
                 ctx.strokeStyle = `rgb(${Math.random()*200},${Math.random()*200},${Math.random()*200})`;
                 ctx.stroke();
             }
-            // 文字
             ctx.font = '18px Arial';
             ctx.textAlign = 'center';
             for (let i = 0; i < 4; i++) {
@@ -1485,16 +1478,102 @@
             }
             isReg ? currentRegCaptcha = captcha : currentCaptcha = captcha;
         }
-        // 初始化验证码
         if (captchaCtx) generateCaptcha(captchaCtx);
         if (regCaptchaCtx) generateCaptcha(regCaptchaCtx, true);
         if (mobileLoginCaptchaCtx) generateCaptcha(mobileLoginCaptchaCtx);
-        function refreshCaptcha() { 
-            generateCaptcha(captchaCtx); 
-            if (mobileLoginCaptchaCtx) generateCaptcha(mobileLoginCaptchaCtx);
+        function refreshCaptcha() {
+            const canvas = document.getElementById('captchaCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            
+            fetch('https:
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        
+                        img.onload = function() {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        };
+                        img.src = result.data.image;
+                    }
+                })
+                .catch(error => {
+                    console.error('获取验证码失�?', error);
+                    
+                });
+        }
+        
+        function generateLocalCaptcha() {
+            const canvas = document.getElementById('captchaCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            
+            let captcha = '';
+            for (let i = 0; i < 4; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(captcha, canvas.width / 2, canvas.height / 2);
+            
+            
+                ctx.strokeStyle = '#ccc';
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
+            }
+            
+            
+        }
+        
+        function updateUIForLoggedInUser(user) {
+            const loginArea = document.getElementById('pcLoginArea');
+            const uploadLink = document.querySelector('.upload-link');
+            
+            if (user) {
+                loginArea.innerHTML = `
+                    <span>欢迎, ${user.username}</span>
+                    <span style="margin-left: 10px; color: ${user.role === 'admin' ? '#ff5533' : '#666'}">
+                        ${user.role === 'admin' ? '管理�? : '用户'}
+                    </span>
+                    <button class="login-btn" onclick="doLogout()" style="margin-left: 10px;">退�?/button>
+                `;
+                
+                if (uploadLink) {
+                    uploadLink.style.display = 'inline-block';
+                }
+                
+                
+                if (user.is_admin || user.uid === '1') {
+                    document.getElementById('adminSystemLink').style.display = 'inline-block';
+                }
+            }
+        }
+        
+        function doLogout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            location.reload();
+        }
+        
+        
+        
+        function showVideoDetail(video) {
+            alert(`视频详情:\n标题: ${video.title}\n描述: ${video.description}\n上传�? ${video.uploader_name || '未知'}`);
         }
         function refreshRegCaptcha() { generateCaptcha(regCaptchaCtx, true); }
-        // 头像预览（注册）
         function previewAvatar() {
             const file = document.getElementById('regAvatarInput').files[0];
             if (!file) return;
@@ -1508,8 +1587,8 @@
                 tip.style.display = 'block';
                 return;
             }
-            if (file.size > 10 * 1024 * 1024) {
-                tip.textContent = '图片大小不能超过10MB';
+            if (file.size > 99 * 1024) {
+                tip.textContent = '头像大小不能超过99KB';
                 tip.style.color = 'red';
                 tip.style.display = 'block';
                 return;
@@ -1523,7 +1602,6 @@
             };
             reader.readAsDataURL(file);
         }
-        // 封面预览（上传视频）
         function previewCover() {
             const file = document.getElementById('uploadCoverInput').files[0];
             if (!file) return;
@@ -1539,7 +1617,6 @@
             };
             reader.readAsDataURL(file);
         }
-        // 登录/注册弹窗切换
         function openLoginModal(formType = 'login') {
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
@@ -1558,7 +1635,6 @@
         }
         function closeLoginModal() { 
             document.getElementById('loginModal').style.display = 'none';
-            // 重置表单
             document.getElementById('regUser').value = '';
             document.getElementById('regPwd').value = '';
             document.getElementById('regCaptcha').value = '';
@@ -1569,75 +1645,102 @@
             document.getElementById('mobileLoginPwd').value = '';
             document.getElementById('mobileLoginCaptcha').value = '';
         }
-        // 登录功能
-        function doMobileLogin() {
+        async function doMobileLogin() {
             const user = document.getElementById('mobileLoginUser').value;
             const pwd = document.getElementById('mobileLoginPwd').value;
             const captcha = document.getElementById('mobileLoginCaptcha').value.toUpperCase();
             if (captcha === currentCaptcha && user && pwd) {
-                isLogin = true;
-                localStorage.setItem('isLogin', 'true');
-                localStorage.setItem('username', user);
-                document.getElementById('pcLoginArea').style.display = 'none';
-                document.getElementById('pcUploadLink').style.display = 'inline';
-                document.getElementById('profileUserName').innerText = user;
-                // 保留编辑按钮
-                const editBtn = document.createElement('button');
-                editBtn.className = 'edit-btn';
-                editBtn.onclick = openEditProfileModal;
-                editBtn.title = '编辑资料';
-                editBtn.innerText = '✏️';
-                document.getElementById('profileUserName').appendChild(editBtn);
-                alert('登录成功');
-                closeLoginModal();
+                try {
+                    
+                    const response = await fetch(`${API_BASE}/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username: user, password: pwd })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        isLogin = true;
+                        localStorage.setItem('isLogin', 'true');
+                        localStorage.setItem('username', user);
+                        
+                        if (data.user) {
+                            localStorage.setItem('user', JSON.stringify(data.user));
+                            localStorage.setItem('uid', data.user.uid);
+                            
+                            
+                            if (data.user.is_admin || data.user.uid === '1') {
+                                document.getElementById('adminSystemLink').style.display = 'inline-block';
+                            }
+                        }
+                        
+                        document.getElementById('pcLoginArea').style.display = 'none';
+                        document.getElementById('profileUserName').innerText = user;
+                        
+                        const editBtn = document.createElement('button');
+                        editBtn.className = 'edit-btn';
+                        editBtn.onclick = openEditProfileModal;
+                        editBtn.title = '编辑资料';
+                        editBtn.innerText = '✏️';
+                        document.getElementById('profileUserName').appendChild(editBtn);
+                        
+                        alert('登录成功');
+                        closeLoginModal();
+                    } else {
+                        alert('登录失败: ' + data.message);
+                    }
+                } catch (error) {
+                    alert('登录错误: ' + error.message);
+                }
             } else {
                 alert('验证码错误或信息不全');
                 refreshCaptcha();
             }
         }
-        function doLogin() {
-            const user = document.getElementById('pcLoginUser').value;
-            const pwd = document.getElementById('pcLoginPwd').value;
-            const captcha = document.getElementById('pcLoginCaptcha').value.toUpperCase();
-            if (captcha === currentCaptcha && user && pwd) {
-                isLogin = true;
-                localStorage.setItem('isLogin', 'true');
-                localStorage.setItem('username', user);
-                document.getElementById('pcLoginArea').style.display = 'none';
-                document.getElementById('pcUploadLink').style.display = 'inline';
-                document.getElementById('profileUserName').innerText = user;
-                // 保留编辑按钮
-                const editBtn = document.createElement('button');
-                editBtn.className = 'edit-btn';
-                editBtn.onclick = openEditProfileModal;
-                editBtn.title = '编辑资料';
-                editBtn.innerText = '✏️';
-                document.getElementById('profileUserName').appendChild(editBtn);
-                alert('登录成功');
-            } else {
-                alert('验证码错误或信息不全');
-                refreshCaptcha();
+        async function doLogin() {
+            const username = document.getElementById('pcLoginUser').value;
+            const password = document.getElementById('pcLoginPwd').value;
+            const captcha = document.getElementById('pcLoginCaptcha').value;
+            
+            if (!username || !password || !captcha) {
+                alert('请填写完整信�?);
+                return;
+            }
+            
+            try {
+                const response = await fetch('https:
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        captcha: captcha
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    localStorage.setItem('uid', result.user.uid);
+                    localStorage.setItem('isLogin', 'true');
+                    localStorage.setItem('username', result.user.username);
+                    alert('登录成功�?);
+                    updateUIForLoggedInUser(result.user);
+                } else {
+                    alert('登录失败: ' + result.message);
+                }
+            } catch (error) {
+                alert('登录错误: ' + error.message);
             }
         }
-        // 注册功能
-        function doRegister() {
-            const user = document.getElementById('regUser').value;
-            const pwd = document.getElementById('regPwd').value;
-            const captcha = document.getElementById('regCaptcha').value.toUpperCase();
-            if (captcha === currentRegCaptcha && user && pwd) {
-                localStorage.setItem('username', user);
-                localStorage.setItem('password', pwd);
-                alert('注册成功，请登录');
-                closeLoginModal();
-                openLoginModal('login');
-            } else {
-                alert('验证码错误或信息不全');
-                refreshRegCaptcha();
-            }
-        }
-        // 页面切换
         function openHomePage() {
-            // 重置所有导航项激活状态
             document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
             document.querySelector('.pc-nav-item[onclick="openHomePage()"]').classList.add('active');
             
@@ -1645,10 +1748,12 @@
             document.getElementById('yinmadPage').style.display = 'none';
             document.getElementById('profilePage').style.display = 'none';
             document.getElementById('videoPlayerPage').style.display = 'none';
-            prevPage = 'homePage'; // 更新返回页面
+            document.getElementById('adminSystemPage').style.display = 'none';
+            prevPage = 'homePage';
+            
+            document.getElementById('adminSystemLink').style.display = 'none';
         }
         function openYinmadPage() {
-            // 重置所有导航项激活状态
             document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
             document.querySelector('.pc-nav-item[onclick="openYinmadPage()"]').classList.add('active');
             
@@ -1656,7 +1761,10 @@
             document.getElementById('yinmadPage').style.display = 'block';
             document.getElementById('profilePage').style.display = 'none';
             document.getElementById('videoPlayerPage').style.display = 'none';
-            prevPage = 'yinmadPage'; // 更新返回页面
+            document.getElementById('adminSystemPage').style.display = 'none';
+            prevPage = 'yinmadPage';
+            
+            document.getElementById('adminSystemLink').style.display = 'none';
         }
         function openProfilePage() {
             const storedLogin = localStorage.getItem('isLogin') === 'true';
@@ -1665,17 +1773,14 @@
                 openLoginModal('login');
                 return;
             }
-            // 重置所有导航项激活状态
             document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
             document.querySelector('.pc-nav-item[onclick="openProfilePage()"]').classList.add('active');
             
             if (storedLogin) {
                 isLogin = true;
                 document.getElementById('pcLoginArea').style.display = 'none';
-                document.getElementById('pcUploadLink').style.display = 'inline';
                 const username = localStorage.getItem('username') || '我的昵称';
                 document.getElementById('profileUserName').innerText = username;
-                // 确保编辑按钮存在
                 if (document.querySelector('.profile-name .edit-btn') === null) {
                     const editBtn = document.createElement('button');
                     editBtn.className = 'edit-btn';
@@ -1689,197 +1794,40 @@
             document.getElementById('yinmadPage').style.display = 'none';
             document.getElementById('profilePage').style.display = 'block';
             document.getElementById('videoPlayerPage').style.display = 'none';
-            prevPage = 'profilePage'; // 更新返回页面
+            document.getElementById('adminSystemPage').style.display = 'none';
+            prevPage = 'profilePage';
+            
+            document.getElementById('adminSystemLink').style.display = 'none';
+            
+            loadUserProfile();
         }
-        // 打开视频播放页（记录上一页）
-        function openVideoPlayer(title, upName, videoId) {
+        function openVideoPlayer(title, upName) {
             document.getElementById('homePage').style.display = 'none';
             document.getElementById('yinmadPage').style.display = 'none';
             document.getElementById('profilePage').style.display = 'none';
-            document.getElementById('adminPage').style.display = 'none';
             document.getElementById('videoPlayerPage').style.display = 'block';
             document.getElementById('playerVideoTitle').textContent = title;
             document.getElementById('playerUpName').textContent = upName;
-            
-            // 保存当前视频ID
-            window.currentVideoId = videoId;
-            
-            // 添加观看历史
-            if (videoId) {
-                addWatchHistory(videoId, title);
-            }
         }
-        // 打开管理员页面
-        function openAdminPage() {
-            const uid = localStorage.getItem('uid');
-            if (uid !== '1') {
-                alert('权限不足');
-                return;
-            }
-            
-            // 重置所有导航项激活状态
-            document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById('adminLink').classList.add('active');
-            
-            document.getElementById('homePage').style.display = 'none';
-            document.getElementById('yinmadPage').style.display = 'none';
-            document.getElementById('profilePage').style.display = 'none';
-            document.getElementById('videoPlayerPage').style.display = 'none';
-            document.getElementById('adminPage').style.display = 'block';
-            prevPage = 'adminPage';
-            
-            loadAdminReports();
-        }
-        
-        // 加载管理员报告
-        async function loadAdminReports() {
-            try {
-                const response = await fetch(`${API_BASE}/admin/reports`);
-                const reports = await response.json();
-                
-                const adminReports = document.getElementById('adminReports');
-                adminReports.innerHTML = '';
-                
-                reports.forEach(report => {
-                    const reportCard = document.createElement('div');
-                    reportCard.className = 'video-item';
-                    reportCard.innerHTML = `
-                        <div class="video-cover" style="background-image: url('${report.cover}'); background-size: cover; background-position: center;">
-                        </div>
-                        <div class="video-title">${report.title}</div>
-                        <div style="padding: 8px; font-size: 12px; color: #666;">
-                            UID: ${report.uid}<br>
-                            时间: ${new Date(report.reportTime).toLocaleString()}
-                        </div>
-                        <div style="padding: 0 8px 8px;">
-                            <button class="modal-btn confirm" onclick="deleteVideo('${report.vid}')">删除视频</button>
-                            <button class="modal-btn" onclick="deleteUser('${report.uid}')">删除用户</button>
-                        </div>
-                    `;
-                    adminReports.appendChild(reportCard);
-                });
-            } catch (error) {
-                console.error('加载管理员报告失败:', error);
-            }
-        }
-        
-        // 管理员搜索
-        async function adminSearch() {
-            const query = document.getElementById('adminSearchInput').value;
-            if (!query) {
-                loadAdminReports();
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/admin/search`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query })
-                });
-                const reports = await response.json();
-                
-                const adminReports = document.getElementById('adminReports');
-                adminReports.innerHTML = '';
-                
-                reports.forEach(report => {
-                    const reportCard = document.createElement('div');
-                    reportCard.className = 'video-item';
-                    reportCard.innerHTML = `
-                        <div class="video-cover" style="background-image: url('${report.cover}'); background-size: cover; background-position: center;">
-                        </div>
-                        <div class="video-title">${report.title}</div>
-                        <div style="padding: 8px; font-size: 12px; color: #666;">
-                            UID: ${report.uid}<br>
-                            时间: ${new Date(report.reportTime).toLocaleString()}
-                        </div>
-                        <div style="padding: 0 8px 8px;">
-                            <button class="modal-btn confirm" onclick="deleteVideo('${report.vid}')">删除视频</button>
-                            <button class="modal-btn" onclick="deleteUser('${report.uid}')">删除用户</button>
-                        </div>
-                    `;
-                    adminReports.appendChild(reportCard);
-                });
-            } catch (error) {
-                console.error('管理员搜索失败:', error);
-            }
-        }
-        
-        // 删除视频
-        async function deleteVideo(vid) {
-            if (!confirm('确定要删除这个视频吗？')) return;
-            
-            try {
-                const response = await fetch(`${API_BASE}/admin/delete/video`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ vid })
-                });
-                
-                const result = await response.json();
-                if (result.success) {
-                    alert('视频删除成功');
-                    loadAdminReports();
-                } else {
-                    alert('删除失败');
-                }
-            } catch (error) {
-                console.error('删除视频失败:', error);
-                alert('删除失败');
-            }
-        }
-        
-        // 删除用户
-        async function deleteUser(uid) {
-            if (!confirm('确定要删除这个用户吗？这将删除用户的所有视频和数据。')) return;
-            
-            try {
-                const response = await fetch(`${API_BASE}/admin/delete/user`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid })
-                });
-                
-                const result = await response.json();
-                if (result.success) {
-                    alert('用户删除成功');
-                    loadAdminReports();
-                } else {
-                    alert('删除失败');
-                }
-            } catch (error) {
-                console.error('删除用户失败:', error);
-                alert('删除失败');
-            }
-        }
-        
-        // 返回功能
         function goBack() {
             document.getElementById('videoPlayerPage').style.display = 'none';
             document.getElementById(prevPage).style.display = prevPage === 'homePage' ? 'flex' : 'block';
-            // 恢复上一页导航激活状态
             document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
-            if (prevPage === 'adminPage') {
-                document.getElementById('adminLink').classList.add('active');
-            } else {
-                document.querySelector(`.pc-nav-item[onclick="open${prevPage.charAt(0).toUpperCase() + prevPage.slice(1)}()"]`).classList.add('active');
-            }
+            document.querySelector(`.pc-nav-item[onclick="open${prevPage.charAt(0).toUpperCase() + prevPage.slice(1)}()"]`).classList.add('active');
         }
-        // 个人中心标签切换
         function showProfileTab(tabId) {
             document.querySelectorAll('.profile-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.profile-content-item').forEach(item => item.classList.remove('active'));
             document.querySelector(`.profile-tab[onclick="showProfileTab('${tabId}')"]`).classList.add('active');
             document.getElementById(`profile${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`).classList.add('active');
         }
-        // 播放器功能（适配宽高比容器）
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
         const progressThumb = document.getElementById('progressThumb');
         const timeDisplay = document.getElementById('timeDisplay');
         function togglePlay() {
             isPlaying = !isPlaying;
-            document.querySelector('.play-btn').innerText = isPlaying ? '⏸' : '▶';
+            document.querySelector('.play-btn').innerText = isPlaying ? '�? : '�?;
         }
         ['mousedown', 'touchstart'].forEach(evt => {
             progressBar?.addEventListener(evt, (e) => {
@@ -1918,44 +1866,38 @@
             };
             timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(videoDuration)}`;
         }
-        // 弹幕功能
         function toggleDanmuPanel() {
             const panel = document.getElementById('danmuPanel');
             panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
         }
         async function sendDanmu() {
-            const text = document.getElementById('danmuText').value.trim();
-            if (!text) return;
+            const content = document.getElementById('danmuInput').value.trim();
+            if (!content) return;
             
-            const uid = localStorage.getItem('uid');
-            if (!uid) {
+            const token = localStorage.getItem('token');
+            if (!token) {
                 alert('请先登录');
                 return;
             }
             
-            const color = document.getElementById('danmuColor').value;
-            const size = document.getElementById('danmuSize').value + 'px';
-            
-            // 发送弹幕到后端
             try {
-                // 这里需要获取当前播放的视频ID
-                const currentVideoId = 'current_video_id'; // 需要从全局变量获取
-                
-                const response = await fetch(`${API_BASE}/danmaku`, {
+const response = await fetch(`${API_BASE}/danmaku`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
                     body: JSON.stringify({
-                        vid: currentVideoId,
-                        uid: uid,
-                        content: text,
-                        time: 0,
-                        color: color
+                        content: content,
+                        video_id: currentVideoId,
+                        time_position: Math.floor(currentVideoTime),
+                        color: document.getElementById('danmuColor').value,
+                        type: 'scroll'
                     })
                 });
                 
                 const result = await response.json();
                 if (result.success) {
-                    // 显示弹幕
                     const danmu = document.createElement('div');
                     danmu.innerText = text;
                     const playerHeight = document.getElementById('playerContainer').offsetHeight;
@@ -1973,20 +1915,18 @@
                     }, 30);
                     document.getElementById('danmuText').value = '';
                 } else {
-                    alert(result.error || '发送弹幕失败');
+                    alert(result.error || '发送弹幕失�?);
                 }
             } catch (error) {
-                console.error('发送弹幕失败:', error);
-                alert('发送弹幕失败');
+                console.error('发送弹幕失�?', error);
+                alert('发送弹幕失�?);
             }
         }
-        // 订阅功能
         function toggleSubscribe() {
             const btn = document.getElementById('subscribeBtn');
             btn.classList.toggle('active');
-            btn.textContent = btn.classList.contains('active') ? '已订阅' : '订阅';
+            btn.textContent = btn.classList.contains('active') ? '已订�? : '订阅';
         }
-        // 点赞功能
         function toggleLike() {
             const btn = document.getElementById('likeBtn');
             const countElement = document.getElementById('likeCount');
@@ -1995,12 +1935,11 @@
             if (btn.classList.contains('active')) {
                 btn.classList.remove('active');
                 count--;
-                showNotification('已取消点赞');
+                showNotification('已取消点�?);
             } else {
                 btn.classList.add('active');
                 count++;
-                showNotification('点赞成功！');
-                // 点赞动画效果
+                showNotification('点赞成功�?);
                 const icon = btn.querySelector('.action-icon');
                 icon.style.transform = 'scale(1.3)';
                 setTimeout(() => {
@@ -2008,14 +1947,12 @@
                 }, 200);
             }
             
-            // 更新计数显示
             if (count >= 10000) {
-                countElement.textContent = (count / 10000).toFixed(1) + '万';
+                countElement.textContent = (count / 10000).toFixed(1) + '�?;
             } else {
                 countElement.textContent = count;
             }
         }
-        // 收藏功能
         function toggleFavorite() {
             const btn = document.getElementById('favoriteBtn');
             const countElement = document.getElementById('favoriteCount');
@@ -2024,12 +1961,11 @@
             if (btn.classList.contains('active')) {
                 btn.classList.remove('active');
                 count--;
-                showNotification('已取消收藏');
+                showNotification('已取消收�?);
             } else {
                 btn.classList.add('active');
                 count++;
-                showNotification('收藏成功！');
-                // 收藏动画效果
+                showNotification('收藏成功�?);
                 const icon = btn.querySelector('.action-icon');
                 icon.style.transform = 'rotate(72deg) scale(1.2)';
                 setTimeout(() => {
@@ -2037,16 +1973,12 @@
                 }, 300);
             }
             
-            // 更新计数显示
             countElement.textContent = count;
         }
-        // 分享功能
         function shareVideo() {
-            // 复制当前页面链接到剪贴板
             const videoTitle = document.getElementById('playerVideoTitle').textContent;
             const shareText = `推荐一个视频：${videoTitle}`;
             
-            // 创建临时输入框用于复制
             const tempInput = document.createElement('input');
             tempInput.value = window.location.href;
             document.body.appendChild(tempInput);
@@ -2056,9 +1988,7 @@
             
             showNotification('链接已复制到剪贴板！');
         }
-        // 通知提示功能
         function showNotification(message) {
-            // 创建通知元素
             const notification = document.createElement('div');
             notification.textContent = message;
             notification.style.cssText = `
@@ -2074,7 +2004,6 @@
                 animation: slideIn 0.3s ease-out;
             `;
             
-            // 添加动画样式
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes slideIn {
@@ -2100,10 +2029,8 @@
             `;
             document.head.appendChild(style);
             
-            // 添加到页面
             document.body.appendChild(notification);
             
-            // 3秒后自动消失
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease-out';
                 setTimeout(() => {
@@ -2113,35 +2040,8 @@
                 }, 300);
             }, 2000);
         }
-        // 上传功能
-        function openUploadModal() {
-            const storedLogin = localStorage.getItem('isLogin') === 'true';
-            if (!isLogin && !storedLogin) {
-                alert('请先登录');
-                openLoginModal('login');
-                return;
-            }
-            document.getElementById('uploadModal').style.display = 'block';
-        }
-        function closeUploadModal() {
-            document.getElementById('uploadModal').style.display = 'none';
-            document.getElementById('uploadTitle').value = '';
-            document.getElementById('uploadCoverInput').value = '';
-            document.getElementById('uploadCoverPreview').style.display = 'none';
-            document.getElementById('uploadVideoInput').value = '';
-        }
-        function doUpload() {
-            const title = document.getElementById('uploadTitle').value;
-            if (!title) {
-                alert('请输入视频标题');
-                return;
-            }
-            alert('视频上传成功（模拟）');
-            closeUploadModal();
-        }
-        // 修改个人资料相关功能
+        
         function openEditProfileModal() {
-            // 提取纯昵称（排除编辑按钮）
             const currentName = document.getElementById('profileUserName').innerText.trim();
             document.getElementById('newNickname').value = currentName;
             document.getElementById('editProfileModal').style.display = 'block';
@@ -2154,6 +2054,13 @@
         function previewEditAvatar() {
             const file = document.getElementById('editAvatarInput').files[0];
             if (!file) return;
+            
+            if (file.size > 99 * 1024) {
+                alert('头像大小不能超过99KB');
+                document.getElementById('editAvatarInput').value = '';
+                return;
+            }
+            
             const preview = document.getElementById('editAvatarPreview');
             const reader = new FileReader();
             reader.onload = e => {
@@ -2168,7 +2075,6 @@
                 alert('昵称不能为空');
                 return;
             }
-            // 更新昵称显示（保留编辑按钮）
             document.getElementById('profileUserName').innerText = newName;
             const editBtn = document.createElement('button');
             editBtn.className = 'edit-btn';
@@ -2178,47 +2084,172 @@
             document.getElementById('profileUserName').appendChild(editBtn);
             
             localStorage.setItem('username', newName);
-            // 更新头像（若有更换）
             const preview = document.getElementById('editAvatarPreview');
             if (preview.style.display === 'block') {
                 document.querySelector('.profile-avatar').style.backgroundImage = `url(${preview.src})`;
-                document.querySelector('.profile-avatar').innerText = ''; // 清空默认文字
+                document.querySelector('.profile-avatar').innerText = '';
             }
             alert('修改成功');
             closeEditProfileModal();
         }
-        // API配置
-        const API_BASE = 'https://acfun-backend.nuoma233.workers.dev';
+        const API_BASE = 'https:
         
-        // 获取认证头
         function getAuthHeaders() {
             const uid = localStorage.getItem('uid');
             return uid ? { 'X-User-UID': uid } : {};
         }
         
-        // 加载视频列表
+        async function loadUserProfile() {
+            try {
+                const uid = localStorage.getItem('uid');
+                if (!uid) return;
+                
+                const response = await fetch(`${API_BASE}/users/${uid}`, {
+                    headers: { 'X-User-UID': uid }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('profileUserUid').innerText = `UID: ${uid}`;
+                    
+                    document.getElementById('followersCount').innerText = data.followers || 0;
+                    document.getElementById('followingCount').innerText = data.following || 0;
+                    document.getElementById('worksCount').innerText = data.worksCount || 0;
+                    
+                    if (data.avatar) {
+                        document.querySelector('.profile-avatar').style.backgroundImage = `url(${data.avatar})`;
+                        document.querySelector('.profile-avatar').innerText = '';
+                    }
+                    
+                    if (data.videos && data.videos.length > 0) {
+                        displayUserWorks(data.videos);
+                    }
+                }
+            } catch (error) {
+                console.error('加载用户数据失败:', error);
+            }
+        }
+        
+        function displayUserWorks(videos) {
+            const container = document.querySelector('#profileWorks .video-grid');
+            container.innerHTML = '';
+            
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                
+                const publishDate = video.createdAt ? new Date(video.createdAt).toLocaleDateString() : '未知日期';
+                
+                videoItem.innerHTML = `
+                    <div class="video-cover" style="background-image: url('${video.cover || ''}'); background-size: cover; background-position: center;">
+                    </div>
+                    <div class="video-title">${video.title}</div>
+                    <div style="padding: 0 8px 8px; font-size: 11px; color: #999;">发布�? ${publishDate}</div>
+                `;
+                
+                videoItem.onclick = () => openVideoPlayer(video.title, '�?, video.vid);
+                container.appendChild(videoItem);
+            });
+        }
+        
+        function generateDefaultVideoCover(title, category) {
+            const svgContent = `
+                <svg width="320" height="180" xmlns="http:
+                    <defs>
+                        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FF5533;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FF8C42;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="320" height="180" fill="url(#bg)"/>
+                    <text x="160" y="60" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">
+                        ${title.substring(0, 15)}
+                    </text>
+                    <text x="160" y="85" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">
+                        ${title.length > 15 ? title.substring(15, 30) : ''}
+                    </text>
+                    <text x="160" y="120" font-family="Arial, sans-serif" font-size="12" fill="rgba(255,255,255,0.8)" text-anchor="middle">
+                        ${category || '视频'}
+                    </text>
+                    <circle cx="160" cy="140" r="15" fill="rgba(255,255,255,0.3)"/>
+                    <polygon points="155,140 160,130 165,140 160,150" fill="white"/>
+                </svg>
+            `;
+            
+            const base64 = btoa(svgContent);
+            return `data:image/svg+xml;base64,${base64}`;
+        }
+        
         async function loadVideos(category = '') {
             try {
-                const url = category ? `${API_BASE}/search` : `${API_BASE}/search`;
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query: category || '' })
-                });
-                const videos = await response.json();
+                const url = `${API_BASE}/videos`;
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log('API返回的数�?', data);
+                
+                const videos = data.success ? (data.videos || []) : [];
+                console.log('处理后的视频数组:', videos);
                 
                 const videoGrid = document.querySelector('.video-grid');
                 videoGrid.innerHTML = '';
                 
+                if (videos.length === 0) {
+                    const testVideo = {
+                        vid: 'test-video-1',
+                        uid: '1',
+                        title: 'MikuFans 欢迎视频',
+                        category: '其他',
+                        createdAt: new Date().toISOString(),
+                        cover: null
+                    };
+                    
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    videoItem.onclick = () => openVideoPlayer(testVideo.title, 'MikuFans', testVideo.vid);
+                    
+                    const coverUrl = generateDefaultVideoCover(testVideo.title, testVideo.category);
+                    const publishDate = testVideo.createdAt ? new Date(testVideo.createdAt).toLocaleDateString() : '未知日期';
+                    
+                    videoItem.innerHTML = `
+                        <div class="video-cover" style="background-image: url('${coverUrl}'); background-size: cover; background-position: center; width: 100%; height: 120px;">
+                        </div>
+                        <div class="video-title" style="padding: 8px; margin: 0;">${testVideo.title}</div>
+                        <div style="padding: 0 8px 8px; font-size: 11px; color: #999;">发布�? ${publishDate}</div>
+                    `;
+                    
+                    videoGrid.appendChild(videoItem);
+                    
+                    const noticeItem = document.createElement('div');
+                    noticeItem.style.cssText = 'grid-column: 1/-1; text-align: center; padding: 20px; color: #666;';
+                    noticeItem.innerHTML = `
+                        <h3>这是一个测试视�?/h3>
+                        <p>要添加更多视频，请登录管理员账号并上传视�?/p>
+                    `;
+                    videoGrid.appendChild(noticeItem);
+                    
+                    return;
+                }
+                
                 videos.forEach(video => {
                     const videoItem = document.createElement('div');
                     videoItem.className = 'video-item';
-                    videoItem.onclick = () => openVideoPlayer(video.title, `UID:${video.uid}`, video.vid);
+                    videoItem.onclick = () => openVideoPlayer(video.title, video.username || '未知用户', video.uid || video.id);
+                    
+                    const publishDate = video.uploaded_at ? new Date(video.uploaded_at).toLocaleDateString() : '未知日期';
+                    
+                    
+                    if (!coverUrl || coverUrl.startsWith('local:
+                        coverUrl = generateDefaultVideoCover(video.title, '其他');
+                    }
+                    
+                    console.log('视频:', video.title, '封面URL:', coverUrl);
                     
                     videoItem.innerHTML = `
-                        <div class="video-cover" style="background-image: url('${video.cover}'); background-size: cover; background-position: center;">
+                        <div class="video-cover" style="background-image: url('${coverUrl}'); background-size: cover; background-position: center; width: 100%; height: 120px;">
                         </div>
-                        <div class="video-title">${video.title}</div>
+                        <div class="video-title" style="padding: 8px; margin: 0;">${video.title}</div>
+                        <div style="padding: 0 8px 8px; font-size: 11px; color: #999;">UP: ${video.username || '未知用户'}${video.ma_id ? ' | ' + video.ma_id : ''} | 发布�? ${publishDate}</div>
                     `;
                     
                     videoGrid.appendChild(videoItem);
@@ -2228,68 +2259,49 @@
             }
         }
         
-        // 加载名人堂数据
-        async function loadFameList() {
-            try {
-                // 暂时显示测试数据，后续可以从API获取
-                const fameList = document.getElementById('fameList');
-                fameList.innerHTML = `
-                    <li>测试UP1 - 1000粉丝</li>
-                    <li>测试UP2 - 800粉丝</li>
-                    <li>测试UP3 - 600粉丝</li>
-                    <li>测试UP4 - 400粉丝</li>
-                    <li>测试UP5 - 200粉丝</li>
-                `;
-            } catch (error) {
-                console.error('加载名人堂失败:', error);
-            }
-        }
         
-        // 加载分类数据
-        async function loadCategories() {
-            try {
-                const categoryList = document.getElementById('categoryList');
-                categoryList.innerHTML = '';
-                
-                const categories = ['番剧', '音乐', '游戏', '演唱会', '音mad'];
-                categories.forEach(category => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `${category} · 分类`;
-                    li.onclick = () => loadVideos(category);
-                    categoryList.appendChild(li);
-                });
-            } catch (error) {
-                console.error('加载分类失败:', error);
-            }
-        }
         
-        // 用户注册
-        async function doRegister() {
+async function doRegister() {
             const user = document.getElementById('regUser').value;
             const pwd = document.getElementById('regPwd').value;
-            const captcha = document.getElementById('regCaptcha').value.toUpperCase();
+            const email = document.getElementById('regEmail').value;
+            const captcha = document.getElementById('regCaptcha').value;
             
-            if (captcha !== currentRegCaptcha || !user || !pwd) {
-                alert('验证码错误或信息不全');
-                refreshRegCaptcha();
+            if (!user || !pwd || !email) {
+                alert('请输入用户名、密码和邮箱');
                 return;
             }
             
+            
             try {
-                const response = await fetch(`${API_BASE}/register`, {
+                
+                const checkData = await checkResponse.json();
+                
+                const isFirstUser = checkData.isFirstUser;
+                
+                const response = await fetch(`${API_BASE}/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user, password: pwd })
+                    body: JSON.stringify({ 
+                        username: user, 
+                        email: email, 
+                        password: pwd,
+                        is_admin: isFirstUser 
+                    })
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    alert('注册成功，请登录');
+                    if (isFirstUser) {
+                        alert('注册成功！您是第一个注册用户，已自动成为管理员，请登录');
+                    } else {
+                        alert('注册成功，请登录');
+                    }
                     closeLoginModal();
                     openLoginModal('login');
                 } else {
-                    alert(data.error || '注册失败');
+                    alert(data.message || '注册失败');
                 }
             } catch (error) {
                 console.error('注册失败:', error);
@@ -2297,52 +2309,56 @@
             }
         }
         
-        // 用户登录
         async function doMobileLogin() {
             const user = document.getElementById('mobileLoginUser').value;
             const pwd = document.getElementById('mobileLoginPwd').value;
             const captcha = document.getElementById('mobileLoginCaptcha').value.toUpperCase();
             
-            if (captcha !== currentCaptcha || !user || !pwd) {
-                alert('验证码错误或信息不全');
-                refreshCaptcha();
+            if (!user || !pwd) {
+                alert('请输入用户名和密�?);
                 return;
             }
             
             try {
-                const response = await fetch(`${API_BASE}/login`, {
+                const response = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: user, password: pwd })
                 });
                 
                 const data = await response.json();
+                console.log('登录响应:', data);
                 
                 if (data.success) {
                     isLogin = true;
+                    
+                        localStorage.setItem('token', data.token);
+                    }
+                    if (data.user) {
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        localStorage.setItem('uid', data.user.uid);
+                    }
+                    
                     localStorage.setItem('isLogin', 'true');
                     localStorage.setItem('username', user);
-                    localStorage.setItem('uid', data.uid);
-                    
                     document.getElementById('pcLoginArea').style.display = 'none';
-                    document.getElementById('pcUploadLink').style.display = 'inline';
                     document.getElementById('profileUserName').innerText = user;
                     
-                    // 显示UID
-                    const uidSpan = document.createElement('span');
-                    uidSpan.style.cssText = 'font-size:12px;color:#666;margin-left:8px;';
-                    uidSpan.innerText = `UID:${data.uid}`;
-                    document.getElementById('profileUserName').appendChild(uidSpan);
-                    
-                    // 如果是管理员，显示管理菜单
-                    if (data.uid === '1') {
-                        document.getElementById('adminLink').style.display = 'inline';
+                    if (data.user) {
+                        document.getElementById('profileUserUid').innerText = `UID: ${data.user.uid}`;
+                        console.log('登录成功，UID:', data.user.uid, 'Token:', data.token ? '已设�? : '未设�?);
+                        
+                        
+                        if (data.user.is_admin || data.user.uid === '1') {
+                            document.getElementById('adminSystemLink').style.display = 'inline-block';
+                        }
                     }
                     
                     alert('登录成功');
                     closeLoginModal();
                 } else {
-                    alert(data.error || '登录失败');
+                    console.error('登录失败:', data.message);
+                    alert(data.message || '登录失败');
                 }
             } catch (error) {
                 console.error('登录失败:', error);
@@ -2350,48 +2366,8 @@
             }
         }
         
-        // 视频上传（爬取Acfun视频）
-        async function doUpload() {
-            const title = document.getElementById('uploadTitle').value;
-            const category = document.getElementById('uploadCategory').value;
-            const uid = localStorage.getItem('uid');
-            
-            if (!title) {
-                alert('请输入Acfun视频ID');
-                return;
-            }
-            
-            if (!uid) {
-                alert('请先登录');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/crawl`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        acId: title,
-                        uid: uid
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    alert('视频爬取成功');
-                    closeUploadModal();
-                    loadVideos(); // 重新加载视频列表
-                } else {
-                    alert(data.error || '爬取失败');
-                }
-            } catch (error) {
-                console.error('爬取失败:', error);
-                alert('爬取失败');
-            }
-        }
         
-        // 打开视频播放页
+        
         function openVideoPlayer(title, upName, videoId) {
             document.getElementById('homePage').style.display = 'none';
             document.getElementById('yinmadPage').style.display = 'none';
@@ -2400,65 +2376,1214 @@
             document.getElementById('playerVideoTitle').textContent = title;
             document.getElementById('playerUpName').textContent = upName;
             
-            // 添加观看历史
+            updateDanmuSendButton();
+            
             if (videoId) {
                 addWatchHistory(videoId, title);
+                loadVideoDetails(videoId);
+                loadRelatedVideos(videoId);
             }
         }
         
-        // 添加观看历史
+        function updateDanmuSendButton() {
+            const sendBtn = document.getElementById('danmuSendBtn');
+            const danmuInput = document.getElementById('danmuText');
+            const isLogin = localStorage.getItem('isLogin') === 'true';
+            
+            if (isLogin) {
+                sendBtn.textContent = '发�?;
+                sendBtn.disabled = false;
+                danmuInput.disabled = false;
+                danmuInput.placeholder = '输入弹幕内容';
+            } else {
+                sendBtn.textContent = '请先登录';
+                sendBtn.disabled = true;
+                danmuInput.disabled = true;
+                danmuInput.placeholder = '请先登录后发送弹�?;
+                danmuInput.value = '';
+            }
+        }
+        
+        async function loadVideoDetails(videoId) {
+            try {
+                const response = await fetch(`${API_BASE}/videos/${videoId}`);
+                const data = await response.json();
+                
+                if (data.success && data.video) {
+                    const video = data.video;
+                    
+                    const playerContainer = document.getElementById('playerContainer');
+                    if (video.videoUrl) {
+                        const existingVideo = playerContainer.querySelector('video');
+                        if (existingVideo) {
+                            existingVideo.remove();
+                        }
+                        
+                        const videoElement = document.createElement('video');
+                        videoElement.src = video.videoUrl;
+                        videoElement.controls = true;
+                        videoElement.style.width = '100%';
+                        videoElement.style.height = '100%';
+                        videoElement.style.borderRadius = '8px';
+                        
+                        playerContainer.insertBefore(videoElement, playerContainer.firstChild);
+                        
+                        if (video.coverUrl) {
+                            videoElement.poster = video.coverUrl;
+                        }
+                    }
+                    
+                    document.getElementById('playerVideoTitle').textContent = video.title;
+                    document.getElementById('playerUpName').textContent = video.username || video.uploaderName || '未知用户';
+                    
+                    
+                    const descriptionElement = document.getElementById('videoDescription');
+                    if (descriptionElement) {
+                        descriptionElement.textContent = video.description || '暂无描述';
+                    } else {
+                        
+                        if (metaDiv) {
+                            const descriptionDiv = document.createElement('div');
+                            descriptionDiv.id = 'videoDescription';
+                            descriptionDiv.style.cssText = 'margin-top: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 4px; font-size: 14px; line-height: 1.5;';
+                            descriptionDiv.textContent = video.description || '暂无描述';
+                            metaDiv.appendChild(descriptionDiv);
+                        }
+                    }
+                    
+                    
+                    const publishDateElement = document.getElementById('videoPublishDate');
+                    if (publishDateElement) {
+                        const publishDate = video.uploaded_at ? new Date(video.uploaded_at).toLocaleDateString() : '未知日期';
+                        publishDateElement.textContent = `发布�? ${publishDate}`;
+                    } else {
+                        
+                        if (upInfo) {
+                            const dateSpan = document.createElement('span');
+                            dateSpan.id = 'videoPublishDate';
+                            dateSpan.style.cssText = 'font-size: 12px; color: #666; margin-left: 10px;';
+                            const publishDate = video.uploaded_at ? new Date(video.uploaded_at).toLocaleDateString() : '未知日期';
+                            dateSpan.textContent = `发布�? ${publishDate}`;
+                            upInfo.appendChild(dateSpan);
+                        }
+                    }
+                    
+                    document.getElementById('likeCount').textContent = video.likes || '0';
+                    document.getElementById('favoriteCount').textContent = video.favorites || '0';
+                }
+            } catch (error) {
+                console.error('加载视频详情失败:', error);
+            }
+        }
+        
         async function addWatchHistory(videoId, title) {
             try {
                 const uid = localStorage.getItem('uid');
                 if (!uid) return;
                 
-                // 这里需要实现观看历史功能，暂时跳过
                 console.log('添加观看历史:', videoId, title);
             } catch (error) {
                 console.error('添加观看历史失败:', error);
             }
         }
         
-        // 页面加载恢复登录状态
+        async function loadRelatedVideos(videoId) {
+            try {
+                const response = await fetch(`${API_BASE}/related/${videoId}`);
+                const data = await response.json();
+                
+                if (data.success && data.videos) {
+                    displayRelatedVideos(data.videos);
+                }
+            } catch (error) {
+                console.error('加载相关推荐失败:', error);
+                displayDefaultRelatedVideos();
+            }
+        }
+        
+        function displayRelatedVideos(videos) {
+            const container = document.querySelector('.related-video-list');
+            container.innerHTML = '';
+            
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'related-video-item';
+                
+                const publishDate = video.createdAt ? new Date(video.createdAt).toLocaleDateString() : '未知日期';
+                
+                videoItem.innerHTML = `
+                    <div class="related-video-cover" style="background-image: url('${video.cover || ''}'); background-size: cover; background-position: center;">
+                    </div>
+                    <div class="related-video-info">
+                        <div class="related-video-title">${video.title}</div>
+                        <div class="related-video-up">UP: ${video.uploaderName}</div>
+                        <div class="related-video-stats">发布�? ${publishDate} | 播放: ${video.views || 0}</div>
+                    </div>
+                `;
+                
+                videoItem.onclick = () => openVideoPlayer(video.title, video.uploaderName, video.vid);
+                container.appendChild(videoItem);
+            });
+        }
+        
+        function displayDefaultRelatedVideos() {
+            const container = document.querySelector('.related-video-list');
+            container.innerHTML = '<p style="padding: 10px; color: #999; text-align: center;">暂无相关推荐</p>';
+        }
+        
+        function openAdminSystemPage() {
+            const storedLogin = localStorage.getItem('isLogin') === 'true';
+            if (!storedLogin) {
+                alert('请先登录');
+                openLoginModal('login');
+                return;
+            }
+            
+            document.querySelectorAll('.pc-nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('#adminSystemLink').classList.add('active');
+            
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('yinmadPage').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('videoPlayerPage').style.display = 'none';
+            
+            document.getElementById('adminSystemPage').style.display = 'block';
+            
+            document.getElementById('adminSystemLink').style.display = 'inline-block';
+            
+            checkAdminStatus();
+        }
+        
+        async function checkAdminStatus() {
+            try {
+                const uid = localStorage.getItem('uid');
+                const token = localStorage.getItem('token');
+                if (!uid) {
+                    showUserSystem();
+                    return;
+                }
+                
+                
+                    showAdminSystem();
+                    return;
+                }
+                
+                const response = await fetch(`${API_BASE}/users/${uid}`, {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'X-User-UID': uid
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && (data.user.is_admin || data.user.uid === '1')) {
+                    showAdminSystem();
+                } else {
+                    showUserSystem();
+                }
+            } catch (error) {
+                console.error('检查管理员状态失�?', error);
+                showUserSystem();
+            }
+        }
+        
+        function showAdminSystem() {
+            document.getElementById('adminSystemTitle').innerText = '管理员信息系�?;
+            document.getElementById('adminSystemDesc').innerText = '管理用户上传的视频内容，24小时后自动删�?;
+            document.getElementById('adminFunctions').style.display = 'block';
+            document.getElementById('userNotice').style.display = 'none';
+            
+            loadPendingVideos();
+        }
+        
+        function showUserSystem() {
+            document.getElementById('adminSystemTitle').innerText = '信息系统';
+            document.getElementById('adminSystemDesc').innerText = '查看您的投稿视频和系统信�?;
+            document.getElementById('adminFunctions').style.display = 'none';
+            document.getElementById('userNotice').style.display = 'none';
+            
+            loadUserVideos();
+        }
+        
+        async function loadUserVideos() {
+            try {
+                const uid = localStorage.getItem('uid');
+                const response = await fetch(`${API_BASE}/users/${uid}/videos`, {
+                    headers: { 'X-User-UID': uid }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayUserVideos(data.videos);
+                } else {
+                    document.getElementById('adminSystemContent').innerHTML = '<p>加载失败�? + (data.error || '未知错误') + '</p>';
+                }
+            } catch (error) {
+                console.error('加载用户视频失败:', error);
+                document.getElementById('adminSystemContent').innerHTML = '<p>加载失败，请稍后重试</p>';
+            }
+        }
+        
+        function displayUserVideos(videos) {
+            const content = document.getElementById('adminSystemContent');
+            
+            if (!videos || videos.length === 0) {
+                content.innerHTML = '<p>暂无投稿视频</p>';
+                return;
+            }
+            
+            content.innerHTML = '';
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.style.position = 'relative';
+                
+                const statusText = video.status === 'pending' ? '待审�? : 
+                                 video.status === 'approved' ? '已通过' : '已拒�?;
+                const statusColor = video.status === 'pending' ? '#FFA500' : 
+                                  video.status === 'approved' ? '#00FF00' : '#FF0000';
+                const publishDate = video.createdAt ? new Date(video.createdAt).toLocaleDateString() : '未知日期';
+                
+                videoItem.innerHTML = `
+                    <div class="video-cover" style="background-image: url('${video.cover || ''}'); background-size: cover; background-position: center;">
+                    </div>
+                    <div class="video-title">${video.title}</div>
+                    <div style="position: absolute; top: 5px; right: 5px; background: ${statusColor}; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
+                        ${statusText}
+                    </div>
+                    <div style="padding: 5px; font-size: 11px; color: #666;">
+                        发布�? ${publishDate}
+                    </div>
+                    <div style="padding: 5px; font-size: 11px; color: #666;">
+                        观看: ${video.views} | 点赞: ${video.likes} | 收藏: ${video.favorites}
+                    </div>
+                `;
+                
+                content.appendChild(videoItem);
+            });
+        }
+        
+        async function loadPendingVideos() {
+            try {
+                const uid = localStorage.getItem('uid');
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE}/admin/videos/pending`, {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'X-User-UID': uid
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayPendingVideos(data.videos || []);
+                } else {
+                    document.getElementById('adminSystemContent').innerHTML = '<p>加载失败�? + (data.message || '未知错误') + '</p>';
+                }
+            } catch (error) {
+                console.error('加载待审核视频失�?', error);
+                document.getElementById('adminSystemContent').innerHTML = '<p>加载失败，请稍后重试</p>';
+            }
+        }
+        
+        function displayPendingVideos(videos) {
+            const container = document.getElementById('adminSystemContent');
+            
+            if (!videos || videos.length === 0) {
+                container.innerHTML = '<p>暂无待审核视�?/p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.style.cssText = 'width: 320px; margin: 10px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);';
+                
+                
+                const uploadedTime = new Date(video.uploaded_at);
+                const expiresTime = new Date(video.expires_at);
+                const now = new Date();
+                const remainingTime = expiresTime - now;
+                const remainingHours = Math.floor(remainingTime / (1000 * 60 * 60));
+                const remainingMinutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                
+                
+                
+                
+                const coverUrl = video.thumbnail_url || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzMzMyIvPgogIDx0ZXh0IHg9IjE2MCIgeT0iOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+5aS056ma5L+h5oGvPC90ZXh0PgogIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjEyMCIgcj0iMTUiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4zIi8+CiAgPHBvbHlnb24gcG9pbnRzPSIxNTUsMTIwIDE2MCwxMTAgMTY1LDEyMCAxNjAsMTMwIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPg==';
+                
+                videoItem.innerHTML = `
+                    <div style="margin-bottom: 10px;">
+                        <img src="${coverUrl}" alt="视频封面" style="width: 100%; height: 180px; object-fit: cover; border-radius: 4px; background-color: #f0f0f0;">
+                    </div>
+                    <h4 style="margin: 0 0 10px 0; color: #333; font-size: 16px;">${video.title}</h4>
+                    <p style="margin: 5px 0; font-size: 12px; color: #666;">上传�? ${video.username || '未知'} (UID: ${video.uploaded_by})</p>
+                    <p style="margin: 5px 0; font-size: 12px; color: #666;">上传时间: ${uploadedTime.toLocaleString()}</p>
+                    <p style="margin: 5px 0; font-size: 12px; color: #666;">剩余时间: <span style="color: ${remainingHours < 2 ? '#ff4444' : '#666'};">${remainingHours}小时${remainingMinutes}分钟</span></p>
+                    <p style="margin: 5px 0; font-size: 12px; color: #666;">文件大小: ${fileSize}</p>
+                    ${video.duration ? `<p style="margin: 5px 0; font-size: 12px; color: #666;">时长: ${Math.floor(video.duration / 60)}�?{video.duration % 60}�?/p>` : ''}
+                    ${video.description ? `<p style="margin: 5px 0; font-size: 12px; color: #666;">描述: ${video.description.length > 50 ? video.description.substring(0, 50) + '...' : video.description}</p>` : ''}
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button onclick="previewVideo('${video.uid}')" style="padding: 6px 12px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">预览</button>
+                        <button onclick="reviewVideo('${video.uid}', true)" style="padding: 6px 12px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">通过</button>
+                        <button onclick="reviewVideo('${video.uid}', false)" style="padding: 6px 12px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">拒绝</button>
+                    </div>
+                `;
+                
+                container.appendChild(videoItem);
+            });
+        }
+        
+        async function reviewVideo(vid, approved) {
+            try {
+                const uid = localStorage.getItem('uid');
+                const reason = approved ? '' : prompt('请输入拒绝理由：');
+                
+                if (!approved && !reason) {
+                    return;
+                }
+                
+                let apiUrl;
+                if (approved) {
+                    apiUrl = `${API_BASE}/admin/videos/${vid}/approve`;
+                } else {
+                    apiUrl = `${API_BASE}/admin/videos/${vid}/reject`;
+                }
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'X-User-UID': uid
+                    },
+                    body: JSON.stringify({ reason: reason })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(data.message);
+                    loadPendingVideos();
+                } else {
+                    alert('操作失败�? + (data.message || '未知错误'));
+                }
+            } catch (error) {
+                console.error('审核视频失败:', error);
+                alert('操作失败，请稍后重试');
+            }
+        }
+        
+        async function previewVideo(videoUID) {
+            try {
+                const uid = localStorage.getItem('uid');
+                const response = await fetch(`${API_BASE}/admin/videos/pending/${videoUID}`, {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'X-User-UID': uid
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.video) {
+                    const video = data.video;
+                    
+                    
+                    const modal = document.createElement('div');
+                    modal.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.8);
+                        z-index: 1000;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    `;
+                    
+                    const content = document.createElement('div');
+                    content.style.cssText = `
+                        background-color: white;
+                        border-radius: 8px;
+                        width: 90%;
+                        max-width: 800px;
+                        max-height: 90%;
+                        overflow-y: auto;
+                        padding: 20px;
+                        position: relative;
+                    `;
+                    
+                    
+                    const coverUrl = video.thumbnail_url || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzMzMyIvPgogIDx0ZXh0IHg9IjE2MCIgeT0iOTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+5aS056ma5L+h5oGvPC90ZXh0PgogIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjEyMCIgcj0iMTUiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4zIi8+CiAgPHBvbHlnb24gcG9pbnRzPSIxNTUsMTIwIDE2MCwxMTAgMTY1LDEyMCAxNjAsMTMwIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPg==';
+                    
+                    content.innerHTML = `
+                        <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 20px; cursor: pointer;">×</button>
+                        <h2 style="margin-top: 0;">视频预览</h2>
+                        <div style="margin-bottom: 15px;">
+                            <img src="${coverUrl}" alt="视频封面" style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 4px; background-color: #f0f0f0;">
+                        </div>
+                        <h3>${video.title}</h3>
+                        <p><strong>上传�?</strong> ${video.username || '未知'} (UID: ${video.uploaded_by || video.uid})</p>
+                        <p><strong>上传时间:</strong> ${new Date(video.uploaded_at).toLocaleString()}</p>
+                        <p><strong>过期时间:</strong> ${new Date(video.expires_at).toLocaleString()}</p>
+                        ${video.duration ? `<p><strong>时长:</strong> ${Math.floor(video.duration / 60)}�?{video.duration % 60}�?/p>` : ''}
+                        ${video.file_size ? `<p><strong>文件大小:</strong> ${(video.file_size / (1024 * 1024)).toFixed(2)} MB</p>` : ''}
+                        ${video.description ? `<p><strong>描述:</strong> ${video.description}</p>` : ''}
+                        ${video.video_url ? `
+                            <div style="margin-top: 15px;">
+                                <h4>视频预览:</h4>
+                                <video controls style="width: 100%; max-height: 400px; border-radius: 4px;">
+                                    <source src="${video.video_url}" type="video/mp4">
+                                    您的浏览器不支持视频播放�?                                </video>
+                            </div>
+                        ` : '<p style="color: #666;">视频文件暂不可预�?/p>'}
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            <button onclick="reviewVideo('${video.uid}', true); this.parentElement.parentElement.parentElement.remove();" style="padding: 8px 16px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">通过</button>
+                            <button onclick="reviewVideo('${video.uid}', false); this.parentElement.parentElement.parentElement.remove();" style="padding: 8px 16px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">拒绝</button>
+                        </div>
+                    `;
+                    
+                    modal.appendChild(content);
+                    document.body.appendChild(modal);
+                    
+                    
+                    modal.addEventListener('click', function(e) {
+                        if (e.target === modal) {
+                            modal.remove();
+                        }
+                    });
+                } else {
+                    alert('获取视频详情失败�? + (data.message || '未知错误'));
+                }
+            } catch (error) {
+                console.error('预览视频失败:', error);
+                alert('预览失败，请稍后重试');
+            }
+        }
+        
+        async function loadUserList() {
+            try {
+                const uid = localStorage.getItem('uid');
+                const response = await fetch(`${API_BASE}/admin/users`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-UID': uid
+                    },
+                    body: JSON.stringify({ limit: 50, offset: 0 })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayUserList(data.users);
+                } else {
+                    document.getElementById('adminSystemContent').innerHTML = '<p>加载用户列表失败�? + (data.error || '未知错误') + '</p>';
+                }
+            } catch (error) {
+                console.error('加载用户列表失败:', error);
+                document.getElementById('adminSystemContent').innerHTML = '<p>加载失败，请稍后重试</p>';
+            }
+        }
+        
+        function displayUserList(users) {
+            const container = document.getElementById('adminSystemContent');
+            
+            if (!users || users.length === 0) {
+                container.innerHTML = '<p>暂无用户</p>';
+                return;
+            }
+            
+            let html = `
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="margin-top: 0;">用户管理</h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                            <thead>
+                                <tr style="background: #f5f5f5;">
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">用户�?/th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">UID</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">作品�?/th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">注册时间</th>
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #ddd;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            
+            users.forEach(user => {
+                const createdDate = new Date(user.createdAt).toLocaleString();
+                
+                html += `
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;">${user.username}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd; font-family: monospace;">${user.uid}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;">${user.worksCount || 0}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;">${createdDate}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd;">
+                            <button onclick="deleteUser('${user.uid}', '${user.username}')" 
+                                    style="background: #ff4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                                删除用户
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+        
+        async function toggleUserType(uid, username, currentType) {
+            const newType = currentType === 'player' ? 'user' : 'player';
+            const typeName = newType === 'player' ? '玩家' : '用户';
+            
+            if (!confirm(`确定要将用户 "${username}" 的类型从 ${currentType === 'player' ? '玩家' : '用户'} 改为 ${typeName} 吗？\n\n${newType === 'player' ? '玩家将不能被删除' : '用户将可以被管理员删�?}`)) {
+                return;
+            }
+            
+            try {
+                const adminUid = localStorage.getItem('uid');
+                const response = await fetch(`${API_BASE}/admin/users/${uid}/type`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-UID': adminUid
+                    },
+                    body: JSON.stringify({ 
+                        userId: uid, 
+                        userType: newType 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(`用户类型已成功修改为 ${typeName}`);
+                    loadUserList();
+                } else {
+                    alert('修改失败�? + (data.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('修改用户类型失败:', error);
+                alert('修改失败，请稍后重试');
+            }
+        }
+        
+        async function deleteUser(uid, username) {
+            if (!confirm(`确定要删除用�?"${username}" 吗？\n\n此操作将：\n- 删除用户账号\n- 删除用户所有视频\n- 删除用户所有弹幕\n- 删除用户头像\n\n此操作不可恢复！`)) {
+                return;
+            }
+            
+            try {
+                const adminUid = localStorage.getItem('uid');
+                const response = await fetch(`${API_BASE}/admin/delete-user`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-UID': adminUid
+                    },
+                    body: JSON.stringify({ targetUid: uid })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('用户删除成功');
+                    loadUserList();
+                } else {
+                    alert('删除失败�? + (data.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('删除用户失败:', error);
+                alert('删除失败，请稍后重试');
+            }
+        }
+        
+        async function createChristmasVideo() {
+            try {
+                const uid = localStorage.getItem('uid');
+                const response = await fetch(`${API_BASE}/admin/create-christmas-video`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-UID': uid
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(data.message || '圣诞视频创建成功�?);
+                    loadPendingVideos();
+                } else {
+                    alert('创建失败�? + (data.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('创建圣诞视频失败:', error);
+                alert('创建失败，请稍后重试');
+            }
+        }
+        
+        async function initializeData() {
+            if (!confirm('确定要初始化示例数据吗？\n\n这将创建：\n- 5个示例视频\n\n注意：需要先注册至少一个用户账号\n如果已有数据，此操作不会覆盖现有数据�?)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/init-data`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(data.message || '数据初始化成功！');
+                    loadVideos();
+                } else {
+                    alert('初始化失败：' + (data.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('初始化数据失�?', error);
+                alert('初始化失败，请稍后重�?);
+            }
+        }
+        
+        async function clearAllData() {
+            if (!confirm('⚠️ 警告：此操作将删除所有数据！\n\n包括：\n- 所有用户账号\n- 所有视频数据\n- 所有弹幕\n- 所有统计数据\n\n删除后需要重新注册用户\n\n确定要继续吗�?)) {
+                return;
+            }
+            
+            if (!confirm('最后确认：真的要删除所有数据吗？\n\n此操作不可恢复！')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/clear-data`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(data.message || '数据清理成功！现在可以重新注册用户（第一个用户UID=1�?);
+                    localStorage.clear();
+                    location.reload();
+                } else {
+                    alert('清理失败�? + (data.error || '未知错误'));
+                }
+            } catch (error) {
+                console.error('清理数据失败:', error);
+                alert('清理失败，请稍后重试');
+            }
+        }
+        
+        async function loadSystemStats() {
+            try {
+                const uid = localStorage.getItem('uid');
+                const response = await fetch(`${API_BASE}/admin/stats`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-UID': uid
+                    },
+                    body: JSON.stringify({ days: 7 })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displaySystemStats(data.stats);
+                } else {
+                    document.getElementById('adminSystemContent').innerHTML = '<p>加载统计失败�? + (data.error || '未知错误') + '</p>';
+                }
+            } catch (error) {
+                console.error('加载系统统计失败:', error);
+                document.getElementById('adminSystemContent').innerHTML = '<p>加载失败，请稍后重试</p>';
+            }
+        }
+        
+        function displaySystemStats(stats) {
+            const container = document.getElementById('adminSystemContent');
+            
+            if (!stats || stats.length === 0) {
+                container.innerHTML = '<p>暂无统计数据</p>';
+                return;
+            }
+            
+            const latestStats = stats[stats.length - 1];
+            
+            container.innerHTML = `
+                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="margin-top: 0;">系统统计 (最新数�?</h3>
+                    <p><strong>用户总数:</strong> ${latestStats.users}</p>
+                    <p><strong>视频总数:</strong> ${latestStats.videos}</p>
+                    <p><strong>待审核视�?</strong> ${latestStats.pendingVideos}</p>
+                    <p><strong>弹幕总数:</strong> ${latestStats.danmu}</p>
+                    <p><strong>统计时间:</strong> ${latestStats.timestamp}</p>
+                </div>
+            `;
+        }
+        
+        async function adminSearch() {
+            const searchTerm = document.getElementById('adminSearchInput').value.trim();
+            if (!searchTerm) {
+                alert('请输入搜索内�?);
+                return;
+            }
+            
+            try {
+                
+                if (searchTerm.startsWith('MA')) {
+                    
+                    const data = await response.json();
+                    
+                    if (data.success && data.user) {
+                        
+                        alert(`找到用户:\n用户�? ${data.user.username}\nMA�? ${data.user.ma_id}\nUID: ${data.user.uid}`);
+                        
+                        alert('未找到该MA号对应的用户');
+                    }
+                } else {
+                    
+                    const response = await fetch(`${API_BASE}/videos/search?title=${encodeURIComponent(searchTerm)}`);
+                    const data = await response.json();
+                    
+                    if (data.success && data.videos && data.videos.length > 0) {
+                        
+                        let resultText = `找到 ${data.videos.length} 个视�?\n\n`;
+                        data.videos.forEach(video => {
+                            resultText += `标题: ${video.title}\nUP: ${video.username || '未知用户'}\n\n`;
+                        });
+                        alert(resultText);
+                    } else {
+                        alert('未找到相关视�?);
+                    }
+                }
+            } catch (error) {
+                console.error('搜索失败:', error);
+                alert('搜索失败，请稍后重试');
+            }
+        }
+        
+        
+        function openUploadModal() {
+            
+            const isLogin = localStorage.getItem('isLogin') === 'true';
+            const token = localStorage.getItem('token');
+            
+            if (!isLogin && !token) {
+                alert('请先登录后再投稿视频');
+                openLoginModal('login');
+                return;
+            }
+            
+            document.getElementById('uploadModal').style.display = 'block';
+        }
+        
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            
+            document.getElementById('uploadTitle').value = '';
+            document.getElementById('uploadDescription').value = '';
+            document.getElementById('uploadCategory').value = '其他';
+            document.getElementById('uploadVideoInput').value = '';
+            document.getElementById('uploadCoverInput').value = '';
+            document.getElementById('uploadVideoInfo').innerHTML = '';
+            document.getElementById('uploadCoverInfo').innerHTML = '';
+            document.getElementById('uploadCoverPreview').style.display = 'none';
+        }
+        
+        function previewVideoFile() {
+            const file = document.getElementById('uploadVideoInput').files[0];
+            const infoDiv = document.getElementById('uploadVideoInfo');
+            
+            if (!file) {
+                infoDiv.innerHTML = '';
+                return;
+            }
+            
+            
+            if (!allowedTypes.includes(file.type)) {
+                infoDiv.innerHTML = '<span style="color: red;">只支持MP4、WebM、OGG格式的视�?/span>';
+                document.getElementById('uploadVideoInput').value = '';
+                return;
+            }
+            
+            
+            const maxSize = 9.9 * 1024 * 1024;
+            if (file.size > maxSize) {
+                infoDiv.innerHTML = '<span style="color: red;">视频大小超过9.9MB限制</span>';
+                document.getElementById('uploadVideoInput').value = '';
+                return;
+            }
+            
+            
+            const sizeInMB = (file.size / 1024 / 1024).toFixed(2);
+            infoDiv.innerHTML = `<span style="color: green;">文件�? ${file.name}<br>大小: ${sizeInMB} MB<br>类型: ${file.type}</span>`;
+            
+            
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(file);
+            video.addEventListener('loadedmetadata', function() {
+                const duration = Math.floor(video.duration);
+                const minutes = Math.floor(duration / 60);
+                const seconds = duration % 60;
+                infoDiv.innerHTML += `<br>时长: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                URL.revokeObjectURL(video.src);
+            });
+        }
+        
+        function previewCoverFile() {
+            const file = document.getElementById('uploadCoverInput').files[0];
+            const infoDiv = document.getElementById('uploadCoverInfo');
+            const preview = document.getElementById('uploadCoverPreview');
+            
+            if (!file) {
+                infoDiv.innerHTML = '';
+                preview.style.display = 'none';
+                return;
+            }
+            
+            
+            if (!allowedTypes.includes(file.type)) {
+                infoDiv.innerHTML = '<span style="color: red;">只支持JPG、PNG、GIF格式的图�?/span>';
+                document.getElementById('uploadCoverInput').value = '';
+                return;
+            }
+            
+            
+            const maxSize = 990 * 1024;
+            if (file.size > maxSize) {
+                infoDiv.innerHTML = '<span style="color: red;">封面大小超过990KB限制</span>';
+                document.getElementById('uploadCoverInput').value = '';
+                return;
+            }
+            
+            
+            const sizeInKB = (file.size / 1024).toFixed(2);
+            infoDiv.innerHTML = `<span style="color: green;">文件�? ${file.name}<br>大小: ${sizeInKB} KB<br>类型: ${file.type}</span>`;
+            
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        let isSubmitting = false;
+        
+        async function submitUpload() {
+            
+            const isLogin = localStorage.getItem('isLogin') === 'true';
+            const uid = localStorage.getItem('uid');
+            const token = localStorage.getItem('token');
+            
+            if (!isLogin || !uid || !token) {
+                alert('请先登录后再投稿');
+                showLoginModal();
+                return;
+            }
+            
+            
+            if (isSubmitting) {
+                console.log('投稿正在进行中，请勿重复点击');
+                return;
+            }
+            
+            const title = document.getElementById('uploadTitle').value.trim();
+            const description = document.getElementById('uploadDescription').value.trim();
+            const category = document.getElementById('uploadCategory').value;
+            const videoFile = document.getElementById('uploadVideoInput').files[0];
+            const coverFile = document.getElementById('uploadCoverInput').files[0];
+            
+            
+                alert('请输入视频标�?);
+                return;
+            }
+            
+            if (!category) {
+                alert('请选择视频分区');
+                return;
+            }
+            
+            if (!videoFile) {
+                alert('请选择视频文件');
+                return;
+            }
+            
+            if (!coverFile) {
+                alert('请选择封面图片');
+                return;
+            }
+            
+            
+            const maxVideoSize = 9.9 * 1024 * 1024;
+            const maxCoverSize = 990 * 1024;
+            
+            if (videoFile.size > maxVideoSize) {
+                alert('视频大小超过9.9MB限制');
+                return;
+            }
+            
+            if (coverFile.size > maxCoverSize) {
+                alert('封面大小超过990KB限制');
+                return;
+            }
+            
+            isSubmitting = true;
+            
+            try {
+                
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('description', description);
+                formData.append('categories', category); 
+                
+                const token = localStorage.getItem('token');
+                const uid = localStorage.getItem('uid');
+                
+                console.log('开始投稿，API地址:', `${API_BASE}/videos/upload`);
+                console.log('认证信息:', { 
+                    token: token ? '已设�? : '未设�?, 
+                    uid: uid || '未设�?,
+                    tokenLength: token ? token.length : 0,
+                    tokenStart: token ? token.substring(0, 20) + '...' : 'null'
+                });
+                console.log('文件信息:', {
+                    title: title,
+                    videoSize: (videoFile.size / 1024 / 1024).toFixed(2) + 'MB',
+                    coverSize: (coverFile.size / 1024).toFixed(2) + 'KB'
+                });
+                
+                
+                try {
+                    console.log('开始API连接测试...');
+                    const testResponse = await fetch(`${API_BASE}/test`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    console.log('API测试响应状�?', testResponse.status);
+                    console.log('API测试响应�?', Object.fromEntries(testResponse.headers.entries()));
+                    
+                    if (!testResponse.ok) {
+                        const errorText = await testResponse.text();
+                        console.error('API测试失败，响应内�?', errorText);
+                        throw new Error(`API服务不可�?(${testResponse.status}): ${errorText}`);
+                    }
+                    
+                    const testResult = await testResponse.json();
+                    console.log('API测试响应数据:', testResult);
+                } catch (testError) {
+                    console.error('API测试失败:', testError);
+                    console.error('API测试错误类型:', testError.name);
+                    console.error('API测试错误消息:', testError.message);
+                    
+                    if (testError.name === 'TypeError' && testError.message.includes('fetch')) {
+                        alert('网络连接失败，请检查网络连接后重试');
+                    } else {
+                        alert('无法连接到服务器，请稍后重试');
+                    }
+                    return;
+                }
+                
+                
+                
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000); 
+                const response = await fetch(`${API_BASE}/videos/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'X-User-UID': uid || ''
+                    },
+                    body: formData,
+                    signal: controller.signal
+                });
+                
+                
+                
+                console.log('响应状�?', response.status, response.statusText);
+                console.log('响应�?', Object.fromEntries(response.headers.entries()));
+                
+                
+                    const errorText = await response.text();
+                    console.error('响应错误:', errorText);
+                    console.error('响应状态码:', response.status);
+                    console.error('响应状态文�?', response.statusText);
+                    console.error('响应类型:', response.headers.get('content-type'));
+                    
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        console.error('解析的错误JSON:', errorJson);
+                        throw new Error(`服务器错�? ${response.status} - ${errorJson.message || errorText}`);
+                    } catch (parseError) {
+                        console.error('无法解析错误响应为JSON:', parseError);
+                        throw new Error(`服务器错�? ${response.status} ${response.statusText} - ${errorText}`);
+                    }
+                }
+                
+                const result = await response.json();
+                console.log('响应数据:', result);
+                
+                if (result.success) {
+                    alert('视频投稿成功！等待管理员审核');
+                    closeUploadModal();
+                    
+                    loadVideos();
+                } else {
+                    alert('投稿失败: ' + (result.message || '未知错误'));
+                }
+            } catch (error) {
+                console.error('投稿失败:', error);
+                
+                
+                if (error.name === 'AbortError') {
+                    alert('投稿超时，请检查网络连接并重试');
+                } else {
+                    alert('投稿失败: ' + error.message);
+                }
+            } finally {
+                isSubmitting = false;
+            }
+        }
+        
+        function previewVideoInfo() {
+            const file = document.getElementById('uploadVideoInput').files[0];
+            if (!file) return;
+            
+            const info = document.getElementById('uploadVideoInfo');
+            const sizeInMB = (file.size / 1024 / 1024).toFixed(2);
+            
+            if (file.size > 100 * 1024 * 1024) {
+                info.innerHTML = `<span style="color: red;">文件�? ${file.name}<br>大小: ${sizeInMB} MB (超过100MB限制)<br>类型: ${file.type}</span>`;
+            } else {
+                info.innerHTML = `文件�? ${file.name}<br>大小: ${sizeInMB} MB<br>类型: ${file.type}`;
+                
+                const video = document.createElement('video');
+                video.src = URL.createObjectURL(file);
+                video.addEventListener('loadedmetadata', function() {
+                    const duration = Math.floor(video.duration);
+                    const minutes = Math.floor(duration / 60);
+                    const seconds = duration % 60;
+                    info.innerHTML += `<br>时长: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    URL.revokeObjectURL(video.src);
+                });
+            }
+        }
+        
+        function previewUploadCover() {
+            const fileInput = document.getElementById('uploadCoverInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                document.getElementById('uploadCoverPreview').style.display = 'none';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('uploadCoverPreview').src = e.target.result;
+                document.getElementById('uploadCoverPreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
         window.onload = function() {
             updateProgressUI();
             const storedLogin = localStorage.getItem('isLogin') === 'true';
             const username = localStorage.getItem('username');
             const uid = localStorage.getItem('uid');
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            console.log('页面加载 - 登录状态检�?', {
+                storedLogin,
+                username,
+                uid,
+                hasToken: !!token,
+                hasUser: !!user
+            });
             
             if (storedLogin && username) {
                 isLogin = true;
                 document.getElementById('pcLoginArea').style.display = 'none';
-                document.getElementById('pcUploadLink').style.display = 'inline';
                 document.getElementById('profileUserName').innerText = username;
                 
-                // 显示UID
                 if (uid) {
                     const uidSpan = document.createElement('span');
                     uidSpan.style.cssText = 'font-size:12px;color:#666;margin-left:8px;';
                     uidSpan.innerText = `UID:${uid}`;
                     document.getElementById('profileUserName').appendChild(uidSpan);
                     
-                    // 如果是管理员，显示管理菜单
-                    if (uid === '1') {
-                        document.getElementById('adminLink').style.display = 'inline';
+                    
+                        const maIdSpan = document.createElement('span');
+                        maIdSpan.style.cssText = 'font-size:12px;color:#FF5533;margin-left:8px;font-weight:bold;';
+                        maIdSpan.innerText = user.ma_id;
+                        document.getElementById('profileUserName').appendChild(maIdSpan);
                     }
+                    
+                    checkUserAdminStatus(uid);
                 }
                 
-                // 添加编辑按钮
                 const editBtn = document.createElement('button');
                 editBtn.className = 'edit-btn';
                 editBtn.onclick = openEditProfileModal;
                 editBtn.title = '编辑资料';
                 editBtn.innerText = '✏️';
                 document.getElementById('profileUserName').appendChild(editBtn);
+                
+                
+                    updateUIForLoggedInUser(JSON.parse(user));
+                }
             }
             
-            // 加载数据
             loadVideos();
-            loadFameList();
-            loadCategories();
         };
+        
+        async function checkUserAdminStatus(uid) {
+            try {
+                const response = await fetch(`${API_BASE}/users/${uid}`, {
+                    headers: { 'X-User-UID': uid }
+                });
+                
+                const data = await response.json();
+                
+            } catch (error) {
+                console.error('检查管理员状态失�?', error);
+            }
+        }
     </script>
 </body>
 </html>
+
+
+
